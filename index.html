@@ -23,7 +23,7 @@
             left: 0;
             width: 250px;
             height: 100%;
-            background-color: #3a2e5d;
+            background-color: #008080; /* Teal Green */
             color: #fff;
             padding: 20px;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -39,7 +39,7 @@
 
         .sidebar h2 {
             text-align: center;
-            margin-bottom: 20px;
+            margin: 50px 0 20px; /* Adjusted margin for better spacing */
         }
 
         .sidebar nav a {
@@ -61,7 +61,7 @@
         }
 
         header {
-            background-color: #2196F3;
+            background-color: #00796b; /* Darker teal for the header */
             color: #fff;
             padding: 30px 0;
             text-align: center;
@@ -95,7 +95,7 @@
 
         main h2 {
             margin-top: 0;
-            color: #3a2e5d;
+            color: #00796b; /* Teal color for headings */
         }
 
         footer {
@@ -121,7 +121,7 @@
         }
 
         .social-icons a:hover {
-            color: #ffd700; /* Highlight color */
+            color: #ffcc66; /* Complementary color to teal */
         }
 
         /* Responsive Design */
@@ -148,33 +148,43 @@
         <nav>
             <a href="#home">Home</a>
             <a href="#about">About Me</a>
+            <a href="#projects">Projects</a>
             <a href="#contact">Contact</a>
         </nav>
         <div class="social-icons">
-            <a href="https://linkedin.com/in/miguel-viloria-195508235"><i class="fab fa-linkedin"></i></a>
-            <a href="https://github.com/migletdespacitos"><i class="fab fa-github"></i></a>
-            <a href="mailto:miko232411@gmail.com"><i class="fas fa-envelope"></i></a>
+            <a href="https://linkedin.com/in/yourprofile"><i class="fab fa-linkedin"></i></a>
+            <a href="https://github.com/yourusername"><i class="fab fa-github"></i></a>
+            <a href="mailto:your.email@example.com"><i class="fas fa-envelope"></i></a>
         </div>
     </aside>
 
     <!-- Main Content -->
     <div class="main-content">
         <!-- Hero Section -->
-        <section class="hero">
+        <section id="home" class="hero">
             <div class="hero-content">
                 <h1>Welcome!</h1>
                 <p>Aspiring Data Scientist studying at NUS</p>
             </div>
         </section>
 
-        <!-- Main Section -->
-        <main>
-            <h2 id="about">About Me</h2>
-            <p>Hello! I'm Miguel, a Year 3 undergraduate at the National University of Singapore, majoring in Data Science & Analytics, with a specialisation in Statistical Methodology. I'm passionate about applying machine learning techniques to solve real-world problems!</p>
-            
-            <h2 id="contact">Contact Me</h2>
-            <p>If you'd like to get in touch, please reach out via <a href="mailto:miko232411@gmail.com">email</a> or connect with me on <a href="https://linkedin.com/in/miguel-viloria-195508235">LinkedIn</a>.</p>
-        </main>
+        <!-- About Me Section -->
+        <section id="about">
+            <h2>About Me</h2>
+            <p>Hello! I'm Miguel, a Year 3 undergraduate at the National University of Singapore, majoring in Data Science & Analytics. I'm passionate about applying machine learning techniques to solve real-world problems, especially in the fields of Mathematics, Statistics, and Quantitative Finance.</p>
+        </section>
+
+        <!-- Projects Section (Placeholder) -->
+        <section id="projects">
+            <h2>Projects</h2>
+            <p>Stay tuned! This section will feature all the cool projects I've been working on, from machine learning models to data analysis tools.</p>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact">
+            <h2>Contact Me</h2>
+            <p>If you'd like to get in touch, please reach out via <a href="mailto:your.email@example.com">email</a> or connect with me on <a href="https://linkedin.com/in/yourprofile">LinkedIn</a>.</p>
+        </section>
 
         <!-- Footer -->
         <footer>
