@@ -14,7 +14,7 @@
             padding: 0;
             background-color: #f4f4f4;
             color: #333;
-            scroll-behavior: smooth; /* For smooth scrolling between sections */
+            scroll-behavior: smooth;
         }
 
         /* Sidebar Styling */
@@ -31,16 +31,16 @@
         }
 
         .sidebar img.profile-photo {
-            width: 100px;
-            height: 100px;
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
             display: block;
-            margin: 0 auto 20px;
+            margin: 20px auto;
         }
 
         .sidebar h2 {
             text-align: center;
-            margin: 50px 0 20px;
+            margin: 30px 0 20px;
         }
 
         .sidebar nav a {
@@ -51,7 +51,8 @@
             transition: color 0.3s ease-in-out;
         }
 
-        .sidebar nav a:hover {
+        .sidebar nav a:hover,
+        .sidebar nav a.active {
             color: #ffd700; /* Highlight color */
         }
 
@@ -74,8 +75,20 @@
             font-size: 2.5em;
         }
 
-        main {
-            margin-top: 20px;
+        .hero {
+            background: url('images/banner.jpg') no-repeat center center/cover;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+
+        .hero-content {
+            background: rgba(0, 0, 0, 0.5); /* Overlay to enhance text visibility */
+            padding: 20px;
+            border-radius: 10px;
         }
 
         main h2 {
@@ -91,7 +104,7 @@
             margin-top: 40px;
         }
 
-        /* Project Cards Styling */
+         /* Project Cards Styling */
         .card-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -108,6 +121,15 @@
             transition: transform 0.2s;
         }
 
+        /* CSS for Images */
+        .card img {
+            width: 100%; /* Ensures the image fits the card width */
+            height: 150px; /* Set a smaller, more compact height */
+            object-fit: cover; /* Keeps the aspect ratio while ensuring it fills the designated height */
+            border-radius: 10px; /* Keeps the rounded corner styling */
+            margin-bottom: 15px; /* Adds some spacing below the image */
+        }
+
         .card:hover {
             transform: scale(1.05);
         }
@@ -119,19 +141,6 @@
 
         .card p {
             margin-bottom: 15px;
-        }
-
-        .card .button {
-            background-color: #008080; /* Teal button */
-            color: white;
-            padding: 10px 15px;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        .card .button:hover {
-            background-color: #00695c; /* Darker teal on hover */
         }
 
         /* Social Icons */
@@ -165,21 +174,20 @@
         }
     </style>
 </head>
-<body>
     <!-- Sidebar -->
     <aside class="sidebar">
-        <img src="your-photo.jpg" alt="Miguel Viloria" class="profile-photo">
+        <img src="images/profile.JPG" alt="Miguel Viloria" class="profile-photo">
         <h2>Miguel Viloria</h2>
         <nav>
-            <a href="#home">Home</a>
-            <a href="#about">About Me</a>
-            <a href="#projects">Projects</a>
-            <a href="#contact">Contact</a>
+            <a href="#home" id="link-home">Home</a>
+            <a href="#about" id="link-about">About Me</a>
+            <a href="#projects" id="link-projects">Projects</a>
+            <a href="#contact" id="link-contact">Contact</a>
         </nav>
         <div class="social-icons">
-            <a href="https://linkedin.com/in/yourprofile"><i class="fab fa-linkedin"></i></a>
-            <a href="https://github.com/yourusername"><i class="fab fa-github"></i></a>
-            <a href="mailto:your.email@example.com"><i class="fas fa-envelope"></i></a>
+            <a href="https://www.linkedin.com/in/miguel-viloria-195508235/"><i class="fab fa-linkedin"></i></a>
+            <a href="https://github.com/migletdespacitos"><i class="fab fa-github"></i></a>
+            <a href="mailto:miko232411@gmail.com"><i class="fas fa-envelope"></i></a>
         </div>
     </aside>
 
@@ -196,7 +204,7 @@
         <!-- About Me Section -->
         <section id="about">
             <h2>About Me</h2>
-            <p>Hello! I'm Miguel, a Year 3 undergraduate at the National University of Singapore, majoring in Data Science & Analytics. I'm passionate about applying machine learning techniques to solve real-world problems, especially in the fields of Mathematics, Statistics, and Quantitative Finance.</p>
+            <p>Hello! I'm Miguel, a Year 3 undergraduate at the National University of Singapore, majoring in Data Science & Analytics. I am passionate about Mathematics and Statistics and have a deep interest in machine learning and big data analytics. I thrive on uncovering insights from complex datasets and am enthusiastic about applying my skills to real-world challenges, contributing to innovative solutions and advancements in the field of data science.</p>
         </section>
 
         <!-- Projects Section -->
@@ -204,26 +212,30 @@
             <h2>Projects</h2>
             <div class="card-container">
                 <div class="card">
+                    <img src="images/project1.jpg" alt="Stock Technical Analysis">
                     <h3>Stock Technical Analysis using Python</h3>
                     <p>Self-directed project using 20, 50, and 200 day SMA, 20 and 50 day EMA, Bollinger Bands, RSI, Stochastic Oscillator, and Fibonacci Retracement Levels to generate both short and long-term stock analysis.</p>
                     <p>Future plans include developing a front-end with more features.</p>
                 </div>
                 <div class="card">
+                    <img src="images/project2.png" alt="HRP Portfolio Optimization">
                     <h3>Portfolio Optimization using Hierarchical Risk Parity in Python</h3>
-                    <p>Self-directed project. Built a portfolio optimizer using Hierarchical Risk Parity (HRP) for effective capital allocation and risk reduction. Utilized `yfinance` for dynamic stock data retrieval and `pypfopt` for optimization. Included expected return, volatility calculations, and capital allocation. Future plans include developing a front-end with more features.</p>
+                    <p>Self-directed project. Built a portfolio optimizer using HRP for effective capital allocation and risk reduction. Utilized `yfinance` for dynamic stock data retrieval and `pypfopt` for optimization.</p>
                 </div>
                 <div class="card">
+                    <img src="images/project3.jpg" alt="Book Recommendation App">
                     <h3>Book Recommendation App</h3>
                     <p>Developed backend for a book recommendation system using Python, Pandas, and Kaggle as part of NUS Hackers Hack&Roll 2024.</p>
                 </div>
                 <div class="card">
+                    <img src="images/project4.png" alt="Lucid Dream Game">
                     <h3>A Lucid Dream (2D Computer Game)</h3>
                     <p>Developed a 2D roguelike computer game using Unity, C#, and Firebase as part of CP2106 Independent Software Development.</p>
                 </div>
                 <div class="card">
+                    <img src="images/project5.png" alt="Breast Cancer Detection AI">
                     <h3>Early Detection of Breast Cancer using AI</h3>
-                    <p>Worked with a team of four to train Machine Learning models for early breast cancer detection using K-nearest Neighbours, Logistic Regression, and Neural Networks. Tools used include Python, NumPy, sklearn, and Keras as part of IT1244: Artificial Intelligence: Technology and Impact.</p>
-                    <p>Presented results in a comprehensive written report.</p>
+                    <p>Worked with a team to train Machine Learning models for early breast cancer detection using K-nearest Neighbours, Logistic Regression, and Neural Networks as part of IT1244: Artificial Intelligence: Technology and Impact. Tools used include Python, NumPy, sklearn, and Keras.</p>
                 </div>
             </div>
         </section>
@@ -236,8 +248,24 @@
 
         <!-- Footer -->
         <footer>
-            <p>&copy; 2024 Miguel Viloria</p>
+            <p>&copy; Miguel Viloria 2024. All Rights Reserved.</p>
         </footer>
     </div>
+
+    <!-- JavaScript for Scroll Indicator -->
+    <script>
+        window.addEventListener('scroll', () => {
+            let sections = document.querySelectorAll('section');
+            let links = document.querySelectorAll('.sidebar nav a');
+
+            sections.forEach((section) => {
+                let rect = section.getBoundingClientRect();
+                if (rect.top >= 0 && rect.top <= window.innerHeight / 2) {
+                    links.forEach(link => link.classList.remove('active'));
+                    document.querySelector(`#link-${section.id}`).classList.add('active');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
