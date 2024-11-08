@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miguel Viloria - About</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #e0e0e0;
+            scroll-behavior: smooth;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #008080;
+            color: #fff;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar img.profile-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            display: block;
+            margin: 20px auto;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin: 30px 0 20px;
+        }
+
+        .sidebar nav a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 0;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .sidebar nav a:hover,
+        .sidebar nav a.active {
+            color: #ffd700;
+        }
+
+        /* Main Content Styling */
+        .main-content {
+            margin-left: 270px;
+            padding: 40px;
+        }
+
+        section {
+            padding: 100px 0;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #00bfa5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <img src="images/profile.JPG" alt="Miguel Viloria" class="profile-photo">
+        <h2>Miguel Viloria</h2>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="#projects" id="link-projects">Projects</a>
+            <a href="#activities" id="link-activities">Activities</a>
+            <a href="#others" id="link-others">Others</a>
+            <a href="#contact" id="link-contact">Contact Me</a>
+        </nav>
+        <div class="social-icons">
+            <a href="https://www.linkedin.com/in/miguel-viloria-195508235/"><i class="fab fa-linkedin"></i></a>
+            <a href="https://github.com/migletdespacitos"><i class="fab fa-github"></i></a>
+            <a href="mailto:miko232411@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Projects Section -->
+        <section id="projects">
+            <h2>Projects</h2>
+            <p>Details about the projects go here.</p>
+        </section>
+
+        <!-- Activities Section -->
+        <section id="activities">
+            <h2>Activities</h2>
+            <p>Details about your activities go here.</p>
+        </section>
+
+        <!-- Others Section -->
+        <section id="others">
+            <h2>Others</h2>
+            <p>Details about other information you want to provide.</p>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact">
+            <h2>Contact Me</h2>
+            <p>If you'd like to get in touch, please reach out via <a href="mailto:miko232411@gmail.com">email</a> or connect with me on <a href="https://linkedin.com/in/miguel-viloria-195508235/">LinkedIn</a>.</p>
+        </section>
+    </div>
+</body>
+</html>
