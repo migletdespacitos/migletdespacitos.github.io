@@ -13,7 +13,7 @@
             margin: 0;
             padding: 0;
             background-color: #121212; /* Dark background for dark mode */
-            color: #e0e0e0; /* Light grey text for better contrast */
+            color: #e0e0e0; /* Light grey text */
             scroll-behavior: smooth;
         }
 
@@ -76,8 +76,8 @@
         }
 
         .hero {
-            background: url('images/banner1.jpg') no-repeat center center/cover; /* Updated to use a suitable data science-related image from Unsplash */
-            height: 200px; /* Smaller height for a more compact banner */
+            background: url('images/banner1.jpg') no-repeat center center/cover;
+            height: 200px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -101,7 +101,7 @@
         }
 
         section {
-            padding: 100px 0; /* Adds space between sections to improve readability */
+            padding: 100px 0;
         }
 
         main h2 {
@@ -132,23 +132,25 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
             transition: transform 0.2s;
-        }
-
-        .card img {
-            width: 100%; /* Ensures the image fits the card width */
-            height: 150px; /* Set a smaller, more compact height */
-            object-fit: cover; /* Keeps the aspect ratio while ensuring it fills the designated height */
-            border-radius: 10px; /* Keeps the rounded corner styling */
-            margin-bottom: 15px; /* Adds some spacing below the image */
+            text-decoration: none;
+            color: inherit; /* Inherit text color */
         }
 
         .card:hover {
             transform: scale(1.05);
         }
 
+        .card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
         .card h3 {
             margin-bottom: 10px;
-            color: #00bfa5; /* Matches the teal theme */
+            color: #00bfa5;
         }
 
         .card p {
@@ -170,7 +172,7 @@
         }
 
         .social-icons a:hover {
-            color: #ffcc66; /* Complementary color to teal */
+            color: #ffcc66;
         }
 
         /* Responsive Design */
@@ -200,8 +202,8 @@
             <a href="#contact" id="link-contact">Contact</a>
         </nav>
         <div class="social-icons">
-            <a href="https://www.linkedin.com/in/miguel-viloria-195508235/"><i class="fab fa-linkedin"></i></a>
-            <a href="https://github.com/migletdespacitos"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/miguel-viloria-195508235/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i></a>
+            <a href="https://github.com/migletdespacitos" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
             <a href="mailto:miko232411@gmail.com"><i class="fas fa-envelope"></i></a>
         </div>
     </aside>
@@ -229,28 +231,27 @@ I am deeply passionate about Data Science, particularly in leveraging Mathematic
         <section id="projects">
             <h2>Projects</h2>
             <div class="card-container">
-    <div class="card">
-        <img src="images/project2.png" alt="HRP Portfolio Optimization">
-        <h3>Portfolio Optimization using Hierarchical Risk Parity in Python</h3>
-        <p>Self-directed project. Built a portfolio optimizer using HRP for effective capital allocation and risk reduction. Utilized `yfinance` for dynamic stock data retrieval and `pypfopt` for optimization.</p>
-    </div>
-    <div class="card">
-        <img src="images/project3.jpg" alt="Book Recommendation App">
-        <h3>Book Recommendation App</h3>
-        <p>Developed backend for a book recommendation system using Python, Pandas, and Kaggle as part of NUS Hackers Hack&Roll 2024.</p>
-    </div>
-    <div class="card">
-        <img src="images/project4.png" alt="Lucid Dream Game">
-        <h3>A Lucid Dream (2D Computer Game)</h3>
-        <p>Developed a 2D roguelike computer game using Unity, C#, and Firebase as part of CP2106 Independent Software Development.</p>
-    </div>
-    <div class="card">
-        <img src="images/project5.png" alt="Breast Cancer Detection AI">
-        <h3>Early Detection of Breast Cancer using Machine Learning</h3>
-        <p>Worked with a team to train Machine Learning models for early breast cancer detection using K-nearest Neighbours, Logistic Regression, and Neural Networks as part of IT1244: Artificial Intelligence: Technology and Impact. Tools used include Python, NumPy, sklearn, and Keras.</p>
-    </div>
-</div>
-
+                <a href="https://github.com/migletdespacitos/hrp-portfolio-optimisation" target="_blank" rel="noopener noreferrer" class="card">
+                    <img src="images/project2.png" alt="HRP Portfolio Optimization">
+                    <h3>Portfolio Optimization using Hierarchical Risk Parity in Python</h3>
+                    <p>Self-directed project. Built a portfolio optimizer using HRP for effective capital allocation and risk reduction. Utilized `yfinance` for dynamic stock data retrieval and `pypfopt` for optimization.</p>
+                </a>
+                <div class="card">
+                    <img src="images/project3.jpg" alt="Book Recommendation App">
+                    <h3>Book Recommendation App</h3>
+                    <p>Developed backend for a book recommendation system using Python, Pandas, and Kaggle as part of NUS Hackers Hack&Roll 2024.</p>
+                </div>
+                <div class="card">
+                    <img src="images/project4.png" alt="Lucid Dream Game">
+                    <h3>A Lucid Dream (2D Computer Game)</h3>
+                    <p>Developed a 2D roguelike computer game using Unity, C#, and Firebase as part of CP2106 Independent Software Development.</p>
+                </div>
+                <div class="card">
+                    <img src="images/project5.png" alt="Breast Cancer Detection AI">
+                    <h3>Early Detection of Breast Cancer using Machine Learning</h3>
+                    <p>Worked with a team to train Machine Learning models for early breast cancer detection using K-nearest Neighbours, Logistic Regression, and Neural Networks as part of IT1244: Artificial Intelligence: Technology and Impact. Tools used include Python, NumPy, sklearn, and Keras.</p>
+                </div>
+            </div>
         </section>
 
         <!-- Activities Section -->
@@ -277,6 +278,7 @@ I am deeply passionate about Data Science, particularly in leveraging Mathematic
                 <li><i class="fas fa-guitar"></i> Playing the guitar</li>
                 <li><i class="fas fa-flag-checkered"></i> Formula 1</li>
                 <li><i class="fas fa-utensils"></i> Cooking</li>
+                <li><i class="fas fa-chess-knight"></i> Chess</li>
             </ul>
         </section>
 
