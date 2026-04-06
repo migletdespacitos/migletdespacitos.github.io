@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Miguel Viloria</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Cabinet+Grotesk:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#0b0f0b;
+  --bg2:#0f140f;
+  --bg3:#141a14;
+  --surface:#111711;
+  --surface2:#161d16;
+  --up:#22c55e;
+  --up2:#16a34a;
+  --dn:#ef4444;
+  --dn2:#b91c1c;
+  --gold:#d4a017;
+  --text:#e8f0e8;
+  --muted:#7a9a7a;
+  --dim:#4a6a4a;
+  --border:#1e2e1e;
+  --border2:#263626;
+}
+body{background:var(--bg);color:var(--text);font-family:'Cabinet Grotesk',sans-serif;line-height:1.6;overflow-x:hidden;}
+
+/* TICKER */
+.ticker-wrap{background:#0a0f0a;border-bottom:1px solid var(--border);overflow:hidden;padding:0.35rem 0;position:fixed;top:0;left:0;right:0;z-index:200;}
+.ticker-track{display:flex;width:max-content;animation:ticker 40s linear infinite;}
+.ticker-item{font-family:'DM Mono',monospace;font-size:0.7rem;padding:0 2rem;white-space:nowrap;display:flex;align-items:center;gap:0.55rem;color:var(--muted);}
+.ticker-sym{color:var(--text);font-weight:500;}
+.t-up{color:var(--up);}
+.t-dn{color:var(--dn);}
+.ticker-sep{color:var(--dim);margin:0 0.5rem;}
+@keyframes ticker{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* NAV */
+nav{position:fixed;top:30px;left:0;right:0;z-index:100;padding:0.9rem 3rem;display:flex;justify-content:space-between;align-items:center;background:rgba(11,15,11,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+.nav-name{font-size:0.88rem;font-weight:700;color:var(--up);letter-spacing:0.04em;font-family:'DM Mono',monospace;}
+.nav-links{display:flex;gap:1.75rem;align-items:center;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:0.75rem;font-family:'DM Mono',monospace;letter-spacing:0.03em;transition:color 0.2s;}
+.nav-links a:hover{color:var(--up);}
+.nav-resume{padding:0.35rem 0.9rem;border:1px solid var(--up2);color:var(--up);font-family:'DM Mono',monospace;font-size:0.74rem;letter-spacing:0.04em;text-decoration:none;transition:all 0.2s;}
+.nav-resume:hover{background:var(--up2);color:#fff;}
+
+section{padding:5rem 3rem;}
+.container{max-width:960px;margin:0 auto;}
+
+/* HERO */
+#hero{padding:8rem 3rem 4.5rem;min-height:100vh;display:flex;align-items:center;}
+.hero-inner{max-width:960px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 300px;gap:4rem;align-items:center;}
+.hero-label{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--up);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:0.7rem;}
+.hero-label::before{content:'';display:inline-block;width:18px;height:1px;background:var(--up);}
+.hero-avail{display:inline-flex;align-items:center;gap:0.5rem;padding:0.26rem 0.8rem;border:1px solid var(--up2);border-radius:20px;font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--up);margin-bottom:1.5rem;}
+.avail-dot{width:6px;height:6px;border-radius:50%;background:var(--up);animation:pulse 2s ease-in-out infinite;}
+.hero-name{font-size:clamp(2.6rem,5.5vw,4.8rem);font-weight:900;line-height:1.0;letter-spacing:-0.03em;color:var(--text);margin-bottom:1.25rem;}
+.hero-name span{color:var(--up);}
+.hero-typewriter{font-family:'DM Mono',monospace;font-size:0.92rem;color:var(--up);margin-bottom:1.25rem;min-height:1.6rem;}
+.cursor{display:inline-block;width:2px;height:1em;background:var(--up);vertical-align:middle;animation:blink 0.8s step-end infinite;margin-left:1px;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+.hero-desc{font-size:0.94rem;color:var(--muted);line-height:1.85;max-width:480px;margin-bottom:2.25rem;}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;}
+.btn-green{padding:0.75rem 1.6rem;background:var(--up2);color:#fff;font-family:'Cabinet Grotesk',sans-serif;font-weight:700;font-size:0.86rem;border:none;cursor:pointer;transition:all 0.2s;}
+.btn-green:hover{background:var(--up);}
+.btn-outline-g{padding:0.75rem 1.6rem;background:transparent;color:var(--text);font-family:'Cabinet Grotesk',sans-serif;font-weight:600;font-size:0.86rem;border:1px solid var(--border2);cursor:pointer;transition:all 0.2s;}
+.btn-outline-g:hover{border-color:var(--up);color:var(--up);}
+
+.hero-right{display:flex;flex-direction:column;align-items:center;gap:1.25rem;}
+.hero-photo{width:240px;height:240px;border-radius:50%;border:2px solid var(--up2);overflow:hidden;background:var(--surface);}
+.hero-photo img{width:100%;height:100%;object-fit:cover;}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);width:100%;border:1px solid var(--border);background:var(--surface);}
+.hero-stat{padding:0.75rem 0.4rem;border-right:1px solid var(--border);text-align:center;}
+.hero-stat:last-child{border-right:none;}
+.hero-stat-num{font-size:1.35rem;font-weight:800;color:var(--up);letter-spacing:-0.02em;font-family:'DM Mono',monospace;}
+.hero-stat-label{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--dim);letter-spacing:0.06em;text-transform:uppercase;margin-top:0.1rem;}
+
+/* META */
+.meta-strip{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg2);}
+.meta-item{padding:1.35rem 3rem;border-right:1px solid var(--border);}
+.meta-item:last-child{border-right:none;}
+.meta-key{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--up);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.3rem;}
+.meta-val{font-size:0.95rem;font-weight:700;color:var(--text);}
+
+.section-header{display:flex;align-items:center;gap:1rem;margin-bottom:2.5rem;}
+.section-label{font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--up);letter-spacing:0.12em;text-transform:uppercase;white-space:nowrap;}
+.section-line{flex:1;height:1px;background:var(--border);}
+
+/* TABS */
+.exp-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:2rem;}
+.exp-tab{font-family:'DM Mono',monospace;font-size:0.73rem;padding:0.55rem 1.2rem;cursor:pointer;color:var(--dim);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s;background:none;border-top:none;border-left:none;border-right:none;letter-spacing:0.04em;}
+.exp-tab.active{color:var(--up);border-bottom-color:var(--up);}
+.exp-tab:hover{color:var(--up);}
+.exp-panel{display:none;}
+.exp-panel.active{display:block;}
+
+/* CARDS */
+.exp-list{display:flex;flex-direction:column;gap:1px;background:var(--border);}
+.exp-item{background:var(--surface);padding:1.6rem 2rem;display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:start;}
+.exp-role{font-size:0.97rem;font-weight:700;margin-bottom:0.2rem;color:var(--text);}
+.exp-org{font-family:'DM Mono',monospace;font-size:0.76rem;color:var(--up);margin-bottom:0.7rem;}
+.exp-desc{font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--muted);line-height:1.85;}
+.exp-date{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--dim);white-space:nowrap;text-align:right;}
+.exp-docs{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.85rem;}
+.exp-doc-link{font-family:'DM Mono',monospace;font-size:0.68rem;padding:0.18rem 0.6rem;border:1px solid var(--border2);color:var(--up);text-decoration:none;transition:all 0.2s;}
+.exp-doc-link:hover{border-color:var(--up);background:rgba(34,197,94,0.06);}
+
+.thesis-card{background:var(--surface);border:1px solid var(--border);border-left:2px solid var(--up);padding:1.85rem;}
+.thesis-title{font-size:1rem;font-weight:700;margin-bottom:0.45rem;color:var(--text);}
+.thesis-sub{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--up);margin-bottom:1.2rem;}
+.thesis-bullets{list-style:none;display:flex;flex-direction:column;gap:0.55rem;}
+.thesis-bullets li{font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--muted);line-height:1.75;padding-left:1.2rem;position:relative;}
+.thesis-bullets li::before{content:'›';position:absolute;left:0;color:var(--up);}
+.thesis-soon{display:inline-flex;align-items:center;gap:0.5rem;margin-top:1.2rem;font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--dim);}
+.soon-dot{width:5px;height:5px;border-radius:50%;background:var(--up);animation:pulse 2s ease-in-out infinite;}
+
+.edu-item{background:var(--surface);border:1px solid var(--border);padding:1.6rem 2rem;display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:start;}
+.edu-degree{font-size:0.97rem;font-weight:700;margin-bottom:0.2rem;color:var(--text);}
+.edu-school{font-family:'DM Mono',monospace;font-size:0.76rem;color:var(--up);margin-bottom:0.55rem;}
+.edu-detail{font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--muted);}
+.edu-courses{margin-top:0.8rem;}
+.edu-courses-label{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--up);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.45rem;}
+.course-tags{display:flex;flex-wrap:wrap;gap:0.3rem;}
+.tag{font-family:'DM Mono',monospace;font-size:0.64rem;padding:0.14rem 0.5rem;border:1px solid var(--border2);color:var(--dim);}
+
+/* PROJECTS */
+.projects-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);}
+.project-card{background:var(--surface);padding:1.6rem;transition:background 0.22s;cursor:pointer;position:relative;overflow:hidden;}
+.project-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--up);transform:scaleX(0);transform-origin:left;transition:transform 0.3s;}
+.project-card:hover{background:var(--surface2);}
+.project-card:hover::after{transform:scaleX(1);}
+.project-type{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--up);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.5rem;}
+.project-title{font-size:0.92rem;font-weight:700;margin-bottom:0.55rem;line-height:1.35;color:var(--text);}
+.project-desc{font-size:0.77rem;color:var(--muted);font-family:'DM Mono',monospace;line-height:1.75;margin-bottom:0.9rem;}
+.project-stack{display:flex;flex-wrap:wrap;gap:0.28rem;}
+.project-arrow{position:absolute;top:1.35rem;right:1.35rem;font-size:0.7rem;color:var(--up);opacity:0;transition:opacity 0.2s;}
+.project-card:hover .project-arrow{opacity:1;}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:500;display:flex;align-items:center;justify-content:center;padding:2rem;opacity:0;pointer-events:none;transition:opacity 0.25s;}
+.modal-overlay.active{opacity:1;pointer-events:all;}
+.modal{background:var(--bg2);border:1px solid var(--border2);max-width:640px;width:100%;max-height:85vh;overflow-y:auto;position:relative;}
+.modal-header{padding:1.75rem 1.75rem 1.1rem;border-bottom:1px solid var(--border);}
+.modal-type{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--up);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.45rem;}
+.modal-title{font-size:1.05rem;font-weight:700;line-height:1.3;color:var(--text);}
+.modal-close{position:absolute;top:1.1rem;right:1.35rem;background:none;border:none;color:var(--dim);font-size:1.1rem;cursor:pointer;transition:color 0.2s;}
+.modal-close:hover{color:var(--up);}
+.modal-body{padding:1.35rem 1.75rem 1.75rem;}
+.modal-section-label{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--up);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.5rem;margin-top:1.1rem;}
+.modal-section-label:first-child{margin-top:0;}
+.modal-bullets{list-style:none;display:flex;flex-direction:column;gap:0.45rem;}
+.modal-bullets li{font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--muted);line-height:1.75;padding-left:1.1rem;position:relative;}
+.modal-bullets li::before{content:'›';position:absolute;left:0;color:var(--up);}
+.modal-tags{display:flex;flex-wrap:wrap;gap:0.3rem;margin-top:0.45rem;}
+.modal-tag{font-family:'DM Mono',monospace;font-size:0.66rem;padding:0.16rem 0.55rem;border:1px solid var(--border2);color:var(--dim);}
+.modal-github{display:inline-flex;align-items:center;gap:0.45rem;margin-top:1.1rem;margin-right:0.5rem;padding:0.48rem 1rem;border:1px solid var(--border2);color:var(--up);text-decoration:none;font-family:'DM Mono',monospace;font-size:0.72rem;transition:all 0.2s;}
+.modal-github:hover{border-color:var(--up);background:rgba(34,197,94,0.06);}
+
+/* CERTS */
+.cert-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);}
+.cert-item{background:var(--surface);padding:1.4rem 1.65rem;display:flex;flex-direction:column;gap:0.38rem;}
+.cert-name{font-size:0.9rem;font-weight:700;color:var(--text);}
+.cert-issuer{font-family:'DM Mono',monospace;font-size:0.73rem;color:var(--up);}
+.cert-link{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--up);text-decoration:none;margin-top:0.22rem;}
+.cert-link:hover{text-decoration:underline;}
+
+/* SKILLS */
+.skills-categories{display:flex;flex-direction:column;gap:1px;background:var(--border);}
+.skill-category{background:var(--surface);padding:1.25rem 2rem;display:grid;grid-template-columns:185px 1fr;gap:1.5rem;align-items:start;}
+.skill-cat-label{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--up);letter-spacing:0.1em;text-transform:uppercase;padding-top:0.12rem;}
+.skill-tags{display:flex;flex-wrap:wrap;gap:0.36rem;}
+.skill-tag{font-family:'DM Mono',monospace;font-size:0.71rem;padding:0.24rem 0.66rem;border:1px solid var(--border2);color:var(--text);}
+
+/* WRITINGS */
+.writings-list{display:flex;flex-direction:column;gap:1px;background:var(--border);}
+.writing-item{background:var(--surface);padding:1.4rem 2rem;display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:center;text-decoration:none;transition:background 0.2s;position:relative;overflow:hidden;}
+.writing-item::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--up);transform:scaleX(0);transform-origin:left;transition:transform 0.3s;}
+.writing-item:hover{background:var(--surface2);}
+.writing-item:hover::after{transform:scaleX(1);}
+.writing-title{font-size:0.9rem;font-weight:700;color:var(--text);margin-bottom:0.22rem;}
+.writing-sub{font-family:'DM Mono',monospace;font-size:0.74rem;color:var(--muted);}
+.writing-arrow{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--up);}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:3rem;align-items:start;}
+.about-bio{font-family:'DM Mono',monospace;font-size:0.82rem;color:var(--muted);line-height:1.95;}
+.about-bio p{margin-bottom:1rem;}
+.about-details{display:flex;flex-direction:column;gap:0.65rem;}
+.detail-row{padding:0.82rem 0.95rem;border:1px solid var(--border);background:var(--surface);}
+.detail-key{font-family:'DM Mono',monospace;font-size:0.64rem;color:var(--up);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.18rem;}
+.detail-val{font-size:0.84rem;color:var(--text);}
+
+/* CONTACT */
+#contact{background:var(--bg2);border-top:1px solid var(--border);}
+.contact-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:2rem;}
+.contact-title{font-size:clamp(1.4rem,3vw,2rem);font-weight:800;color:var(--text);}
+.contact-title span{color:var(--up);}
+.contact-links{display:flex;gap:0.65rem;flex-wrap:wrap;}
+.contact-link{padding:0.55rem 1.1rem;border:1px solid var(--border2);color:var(--muted);text-decoration:none;font-family:'DM Mono',monospace;font-size:0.74rem;letter-spacing:0.04em;transition:all 0.2s;}
+.contact-link:hover{border-color:var(--up);color:var(--up);}
+
+footer{padding:1.25rem 3rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--bg);}
+footer span{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--dim);}
+
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+@media(max-width:720px){
+  nav{padding:0.85rem 1.25rem;top:28px;}
+  .nav-links{gap:0.8rem;}
+  .nav-links a{font-size:0.68rem;}
+  section{padding:3.5rem 1.25rem;}
+  #hero{padding:7rem 1.25rem 3rem;min-height:unset;}
+  .hero-inner{grid-template-columns:1fr;}
+  .hero-right{order:-1;}
+  .hero-photo{width:140px;height:140px;}
+  .projects-grid,.cert-grid,.about-grid{grid-template-columns:1fr;}
+  .skill-category{grid-template-columns:1fr;gap:0.55rem;}
+  .exp-item,.edu-item{grid-template-columns:1fr;}
+  .meta-strip{grid-template-columns:1fr;}
+  .meta-item{border-right:none;border-bottom:1px solid var(--border);padding:1.1rem 1.25rem;}
+  footer{flex-direction:column;gap:0.4rem;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modalBox">
+    <div class="modal-header">
+      <div class="modal-type" id="mType"></div>
+      <div class="modal-title" id="mTitle"></div>
+      <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    </div>
+    <div class="modal-body" id="mBody"></div>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track" id="ticker"></div>
+</div>
+
+<nav>
+  <span class="nav-name">MV · DSA</span>
+  <div class="nav-links">
+    <a href="#experience">Experience</a>
+    <a href="#education">Education</a>
+    <a href="#projects">Projects</a>
+    <a href="#certificates">Certs</a>
+    <a href="#skills">Skills</a>
+    <a href="#writings">Writings</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <a class="nav-resume" href="#" target="_blank">Resume</a>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-label">Portfolio</div>
+      <div class="hero-avail"><span class="avail-dot"></span>Graduating July 2026</div>
+      <div class="hero-name">Miguel<br><span>Viloria</span></div>
+      <div class="hero-typewriter"><span id="typewriter"></span><span class="cursor"></span></div>
+      <p class="hero-desc">Final-year Data Science & Analytics student at NUS. I build ML pipelines, research regime-adaptive trading models, and deploy AI-enabled tools — working at the intersection of data science and quantitative finance.</p>
+      <div class="hero-btns">
+        <button class="btn-green" onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">View My Work</button>
+        <button class="btn-outline-g" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get in Touch</button>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-photo">
+        <img src="https://i.imgur.com/ZJJk1XG.jpeg" alt="Miguel Viloria" onerror="this.parentElement.innerHTML='<div style=\'padding:2rem;text-align:center;font-family:DM Mono,monospace;font-size:0.7rem;color:#4a6a4a\'>Photo loading…</div>'">
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="hero-stat-num">6+</div><div class="hero-stat-label">Projects</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">2</div><div class="hero-stat-label">Internships</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">2</div><div class="hero-stat-label">Writings</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="meta-strip">
+  <div class="meta-item"><div class="meta-key">Degree</div><div class="meta-val">BSc (Hons) Data Science & Analytics, NUS</div></div>
+  <div class="meta-item"><div class="meta-key">Location</div><div class="meta-val">Singapore</div></div>
+</div>
+
+<section id="experience">
+  <div class="container">
+    <div class="section-header"><span class="section-label">Experience</span><div class="section-line"></div></div>
+    <div class="exp-tabs">
+      <button class="exp-tab active" onclick="switchTab('thesis',this)">Honours Thesis</button>
+      <button class="exp-tab" onclick="switchTab('work',this)">Work</button>
+      <button class="exp-tab" onclick="switchTab('activities',this)">Activities</button>
+    </div>
+    <div class="exp-panel active" id="tab-thesis">
+      <div class="thesis-card">
+        <div class="thesis-title">Meta-Model for Regime-Adaptive Deep Hedging under Stochastic Volatility</div>
+        <div class="thesis-sub">Supervised by Prof. Dr. Julian Sester · Jan 2026 – Present</div>
+        <ul class="thesis-bullets">
+          <li>Developed a regime-adaptive hedging framework combining deep learning and stochastic volatility models to improve robustness under changing market conditions.</li>
+          <li>Implemented and benchmarked delta hedging, volatility-adjusted hedging (EWMA), and deep hedging policies under both frictionless and transaction cost settings.</li>
+          <li>Simulated financial markets using the Heston stochastic volatility model and Monte Carlo methods to generate training and evaluation datasets.</li>
+          <li>Designed a meta-classification model to infer volatility regimes from market features and dynamically select optimal hedging policies.</li>
+          <li>Evaluated performance using PnL-based replication error metrics (RMSE, MAE) across synthetic and real market data, demonstrating improved robustness over single-model approaches.</li>
+        </ul>
+        <div class="thesis-soon"><div class="soon-dot"></div> Paper and code links coming soon.</div>
+      </div>
+    </div>
+    <div class="exp-panel" id="tab-work">
+      <div class="exp-list">
+        <div class="exp-item">
+          <div>
+            <div class="exp-role">Strategy & Data Intern</div>
+            <div class="exp-org">Ministry of Health, Singapore — International Cooperation Division</div>
+            <div class="exp-desc">Processed and analysed cross-agency datasets to support strategic workforce planning. Identified thematic patterns in cross-agency inputs and structured policy responses into a centralised mapping framework for leadership-level decision-making.</div>
+          </div>
+          <div class="exp-date">Sep – Oct 2025</div>
+        </div>
+        <div class="exp-item">
+          <div>
+            <div class="exp-role">Data & AI Intern</div>
+            <div class="exp-org">Ministry of Health, Singapore — International Cooperation Division</div>
+            <div class="exp-desc">Built AI-enabled tools that reduced manual effort by ~30% across administrative tasks. Designed and deployed LLM-powered chatbots customised for the Division's workflows, conducted AI literacy workshops, and produced user guides to ensure sustainable adoption across non-technical colleagues.</div>
+            <div class="exp-docs">
+              <a class="exp-doc-link" href="https://drive.google.com/file/d/1P7SaxQbqe06dCmA5zQ68pItmGpLdQNim/view?usp=sharing" target="_blank">Certificate ↗</a>
+              <a class="exp-doc-link" href="https://docs.google.com/document/d/1JbtmxzAhSgAAGSv14RPOZW5mKyWMGiHw/edit?usp=sharing" target="_blank">Testimonial ↗</a>
+            </div>
+          </div>
+          <div class="exp-date">May – Aug 2025</div>
+        </div>
+      </div>
+    </div>
+    <div class="exp-panel" id="tab-activities">
+      <div class="exp-list">
+        <div class="exp-item"><div><div class="exp-role">Orientation Group Leader</div><div class="exp-org">Mathematics & Statistics Orientation Camp, NUS</div><div class="exp-desc">Led a group of incoming Data Science freshmen, providing guidance on the curriculum and academic opportunities.</div></div><div class="exp-date">2023</div></div>
+        <div class="exp-item"><div><div class="exp-role">TeamXP Executive</div><div class="exp-org">NUS Statistics & Data Science Society</div><div class="exp-desc">Assisted the TeamXP Director in planning welfare activities for society members, fostering a supportive environment for Data Science students.</div></div><div class="exp-date">2022 – 2023</div></div>
+        <div class="exp-item"><div><div class="exp-role">ComLink Befriender</div><div class="exp-org">Community Development Council, Singapore</div><div class="exp-desc">Engaged with families through community outreach, developing understanding of socioeconomic challenges and support needs.</div></div><div class="exp-date">Mar 2025 – Feb 2026</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="education" style="background:var(--bg2);">
+  <div class="container">
+    <div class="section-header"><span class="section-label">Education</span><div class="section-line"></div></div>
+    <div class="edu-item">
+      <div>
+        <div class="edu-degree">Bachelor of Science (Hons) — Data Science & Analytics</div>
+        <div class="edu-school">National University of Singapore · Aug 2022 – May 2026</div>
+        <div class="edu-detail">Expected graduation July 2026.</div>
+        <div class="edu-courses">
+          <div class="edu-courses-label">Relevant Coursework</div>
+          <div class="course-tags"><span class="tag">Machine Learning</span><span class="tag">Convex Optimisation</span><span class="tag">Data Science in FinTech</span><span class="tag">Regression Analysis</span><span class="tag">Data Science in Practice</span><span class="tag">Data Structures & Algorithms</span><span class="tag">Economic Analysis</span><span class="tag">Decision-Making in Business</span><span class="tag">Data Visualisation</span></div>
+        </div>
+      </div>
+      <div class="exp-date">2022 – 2026</div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="container">
+    <div class="section-header"><span class="section-label">Projects</span><div class="section-line"></div></div>
+    <div class="projects-grid">
+      <div class="project-card" onclick="openProject('credit')"><span class="project-arrow">↗</span><div class="project-type">FinTech · ML</div><div class="project-title">Credit Risk Modelling with Explainable ML</div><div class="project-desc">Credit-scoring models on imbalanced data with GHOST threshold calibration and SHAP interpretability.</div><div class="project-stack"><span class="tag">Python</span><span class="tag">Gradient Boosting</span><span class="tag">SHAP</span><span class="tag">scikit-learn</span></div></div>
+      <div class="project-card" onclick="openProject('rna')"><span class="project-arrow">↗</span><div class="project-type">Bioinformatics · ML</div><div class="project-title">m6A RNA Modification Classifier</div><div class="project-desc">HistGradientBoosting classifier for m6A modifications from RNA-Seq data on SG-NEx cancer cell lines.</div><div class="project-stack"><span class="tag">Python</span><span class="tag">scikit-learn</span><span class="tag">RNA-Seq</span><span class="tag">Pandas</span></div></div>
+      <div class="project-card" onclick="openProject('themepark')"><span class="project-arrow">↗</span><div class="project-type">Operations Research</div><div class="project-title">Theme Park Resource Allocation</div><div class="project-desc">Demand modelling and staff optimisation for Universal Studios Singapore using forecasted visitor flows.</div><div class="project-stack"><span class="tag">Python</span><span class="tag">Optimisation</span><span class="tag">Forecasting</span><span class="tag">Pandas</span></div></div>
+      <div class="project-card" onclick="openProject('hrp')"><span class="project-arrow">↗</span><div class="project-type">Finance · Self-Directed</div><div class="project-title">Portfolio Optimisation via Hierarchical Risk Parity</div><div class="project-desc">Python portfolio optimiser using HRP with yfinance and PyPortfolioOpt for robust risk allocation.</div><div class="project-stack"><span class="tag">Python</span><span class="tag">yfinance</span><span class="tag">PyPortfolioOpt</span><span class="tag">HRP</span></div></div>
+      <div class="project-card" onclick="openProject('cancer')"><span class="project-arrow">↗</span><div class="project-type">ML · Healthcare</div><div class="project-title">Early Breast Cancer Detection</div><div class="project-desc">KNN, Logistic Regression, and Neural Network models for early cancer detection using medical datasets.</div><div class="project-stack"><span class="tag">Python</span><span class="tag">NumPy</span><span class="tag">Keras</span><span class="tag">scikit-learn</span></div></div>
+      <div class="project-card" onclick="openProject('game')"><span class="project-arrow">↗</span><div class="project-type">Game Dev · Hackathon</div><div class="project-title">A Lucid Dream & Book Recommender</div><div class="project-desc">2D roguelike game (NUS Orbital, Gemini cert) and a book recommendation backend from Hack&Roll 2024.</div><div class="project-stack"><span class="tag">Unity</span><span class="tag">C#</span><span class="tag">Firebase</span><span class="tag">Python</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="certificates" style="background:var(--bg2);">
+  <div class="container">
+    <div class="section-header"><span class="section-label">Certificates</span><div class="section-line"></div></div>
+    <div class="cert-grid">
+      <div class="cert-item"><div class="cert-name">Orbital: Gemini (Intermediate)</div><div class="cert-issuer">National University of Singapore · 2023</div><a class="cert-link" href="https://credentials.nus.edu.sg/03042b90-91b9-4a0c-adf5-6527346c8c7c#acc.vK3nJLtf" target="_blank">View credential ↗</a></div>
+      <div class="cert-item"><div class="cert-name">Certificate of Proficiency in Chinese Language (Elementary)</div><div class="cert-issuer">National University of Singapore</div><a class="cert-link" href="https://credentials.nus.edu.sg/62fd4008-7bc2-41c8-ae26-400c5bcc4515#acc.fZyYMAoX" target="_blank">View credential ↗</a></div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="container">
+    <div class="section-header"><span class="section-label">Skills</span><div class="section-line"></div></div>
+    <div class="skills-categories">
+      <div class="skill-category"><div class="skill-cat-label">Programming</div><div class="skill-tags"><span class="skill-tag">Python</span><span class="skill-tag">SQL</span><span class="skill-tag">R</span><span class="skill-tag">Java</span></div></div>
+      <div class="skill-category"><div class="skill-cat-label">Machine Learning</div><div class="skill-tags"><span class="skill-tag">scikit-learn</span><span class="skill-tag">TensorFlow</span><span class="skill-tag">Keras</span><span class="skill-tag">PyTorch</span><span class="skill-tag">Gradient Boosting</span><span class="skill-tag">Random Forests</span><span class="skill-tag">LSTM</span><span class="skill-tag">RNNs</span><span class="skill-tag">CNNs</span><span class="skill-tag">Reinforcement Learning</span><span class="skill-tag">Stratified CV</span><span class="skill-tag">SHAP</span></div></div>
+      <div class="skill-category"><div class="skill-cat-label">Data & Analysis</div><div class="skill-tags"><span class="skill-tag">NumPy</span><span class="skill-tag">Pandas</span><span class="skill-tag">Time Series Forecasting</span><span class="skill-tag">Regression Analysis</span><span class="skill-tag">Clustering</span><span class="skill-tag">Feature Engineering</span></div></div>
+      <div class="skill-category"><div class="skill-cat-label">Quantitative Finance</div><div class="skill-tags"><span class="skill-tag">Deep Hedging</span><span class="skill-tag">ML for Derivatives Pricing</span><span class="skill-tag">Delta Hedging</span><span class="skill-tag">Stochastic Volatility</span><span class="skill-tag">Heston Model</span><span class="skill-tag">Monte Carlo Simulation</span><span class="skill-tag">Portfolio Optimisation</span><span class="skill-tag">Hierarchical Risk Parity</span><span class="skill-tag">Credit Risk Modelling</span><span class="skill-tag">Robust Statistical Arbitrage</span><span class="skill-tag">Risk Measures</span><span class="skill-tag">EWMA</span></div></div>
+      <div class="skill-category"><div class="skill-cat-label">NLP</div><div class="skill-tags"><span class="skill-tag">Text Preprocessing</span><span class="skill-tag">Prompt Engineering</span><span class="skill-tag">Qualitative Data Analysis</span></div></div>
+      <div class="skill-category"><div class="skill-cat-label">Visualisation</div><div class="skill-tags"><span class="skill-tag">Tableau</span><span class="skill-tag">Power BI</span><span class="skill-tag">Matplotlib</span><span class="skill-tag">ggplot2</span></div></div>
+      <div class="skill-category"><div class="skill-cat-label">Tools & Platforms</div><div class="skill-tags"><span class="skill-tag">Jupyter</span><span class="skill-tag">GitHub</span><span class="skill-tag">UNIX / Linux</span><span class="skill-tag">AWS S3</span><span class="skill-tag">MS Office</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="writings" style="background:var(--bg2);">
+  <div class="container">
+    <div class="section-header"><span class="section-label">Writings</span><div class="section-line"></div></div>
+    <div class="writings-list">
+      <a class="writing-item" href="https://medium.com/@miko232411/every-decision-chooses-its-own-mistakes-38de881561f2" target="_blank"><div><div class="writing-title">Every Decision Chooses Its Own Mistakes</div><div class="writing-sub">On how systems decide what to protect and what to let go</div></div><div class="writing-arrow">↗</div></a>
+      <a class="writing-item" href="https://medium.com/@miko232411/the-problem-is-not-intention-06a6d7e5e5fc" target="_blank"><div><div class="writing-title">The Problem Is Not Intention</div><div class="writing-sub">On incentives, time horizons, and why systems produce the outcomes they do</div></div><div class="writing-arrow">↗</div></a>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="container">
+    <div class="section-header"><span class="section-label">About</span><div class="section-line"></div></div>
+    <div class="about-grid">
+      <div class="about-bio">
+        <p>I'm Miguel, a final-year Data Science & Analytics student at NUS with a strong interest in machine learning and quantitative finance. My work spans regime-adaptive deep hedging frameworks, AI tooling for government workflows, credit risk modelling, and bioinformatics classification — reflecting a broad technical foundation I apply wherever data and rigour matter.</p>
+        <p>I'm drawn to problems where financial mathematics and ML converge — options pricing, risk modelling, portfolio construction — but I thrive equally in other data-rich environments. Past work has taken me into public health policy, genomics, and operational research, and I'm comfortable adapting my toolkit to new domains and problem structures.</p>
+        <p>Whether the context is a trading desk, a policy division, or a research lab, the goal is the same: make sense of complex data and act on it well.</p>
+        <p>Outside of work, I enjoy chess, basketball, cycling, guitar, cooking, and following Formula 1.</p>
+        <p>Languages: English, Filipino, Mandarin (Intermediate), French (Elementary).</p>
+      </div>
+      <div class="about-details">
+        <div class="detail-row"><div class="detail-key">Education</div><div class="detail-val">BSc (Hons) Data Science & Analytics, NUS</div></div>
+        <div class="detail-row"><div class="detail-key">Location</div><div class="detail-val">Singapore</div></div>
+        <div class="detail-row"><div class="detail-key">Graduating</div><div class="detail-val">July 2026</div></div>
+        <div class="detail-row"><div class="detail-key">Interests</div><div class="detail-val">Quant Finance · ML · Chess · Formula 1</div></div>
+        <div class="detail-row"><div class="detail-key">Community</div><div class="detail-val">ComLink Befriender · NUS Statistics & Data Science Society</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container">
+    <div class="contact-inner">
+      <div class="contact-title">Let's work<br><span>together.</span></div>
+      <div class="contact-links">
+        <a class="contact-link" href="mailto:miko232411@gmail.com">Email ↗</a>
+        <a class="contact-link" href="https://www.linkedin.com/in/miguel-viloria-195508235/" target="_blank">LinkedIn ↗</a>
+        <a class="contact-link" href="https://github.com/migletdespacitos" target="_blank">GitHub ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Miguel Viloria</span>
+  <span>NUS · Singapore</span>
+</footer>
+
+<script>
+// REAL TICKER DATA (prices from early April 2026)
+const tickerData=[
+  {sym:'SPX',val:'6,720',chg:'+0.31%',up:true},
+  {sym:'NVDA',val:'$177.39',chg:'+0.93%',up:true},
+  {sym:'AAPL',val:'$255.92',chg:'+0.11%',up:true},
+  {sym:'MSFT',val:'$373.46',chg:'+1.11%',up:true},
+  {sym:'TSLA',val:'$360.59',chg:'+5.42%',up:true},
+  {sym:'GOOGL',val:'$295.77',chg:'+0.54%',up:true},
+  {sym:'META',val:'$617.45',chg:'-0.82%',up:false},
+  {sym:'AMZN',val:'$209.77',chg:'+0.38%',up:true},
+  {sym:'VIX',val:'22.26',chg:'-5.31%',up:false},
+  {sym:'BTC',val:'$74,592',chg:'+0.56%',up:true},
+  {sym:'10Y UST',val:'4.20%',chg:'-0.43%',up:false},
+  {sym:'NASDAQ',val:'22,477',chg:'+0.46%',up:true},
+  {sym:'GOLD',val:'$3,103',chg:'+0.90%',up:true},
+  {sym:'MIGUEL · NUS DSA',val:'CLASS OF 2026',chg:'OPEN TO WORK',up:true},
+];
+function buildTicker(){
+  const doubled=[...tickerData,...tickerData];
+  return doubled.map(t=>`<span class="ticker-item"><span class="ticker-sym">${t.sym}</span> ${t.val} <span class="${t.up?'t-up':'t-dn'}">${t.up?'▲':'▼'} ${t.chg}</span><span class="ticker-sep">|</span></span>`).join('');
+}
+document.getElementById('ticker').innerHTML=buildTicker();
+
+// TYPEWRITER
+const phrases=['Hi, I am Miguel Viloria.','Data Scientist.','ML Specialist.','Aspiring Quant Researcher.','NUS DSA · Class of 2026.'];
+let pi=0,ci=0,deleting=false,tw=document.getElementById('typewriter');
+function type(){
+  const phrase=phrases[pi];
+  if(!deleting){tw.textContent=phrase.slice(0,ci+1);ci++;if(ci===phrase.length){setTimeout(()=>{deleting=true;},1800);setTimeout(type,1800+40);return;}}
+  else{tw.textContent=phrase.slice(0,ci-1);ci--;if(ci===0){deleting=false;pi=(pi+1)%phrases.length;}}
+  setTimeout(type,deleting?42:70);
+}
+setTimeout(type,600);
+
+function switchTab(id,btn){
+  document.querySelectorAll('.exp-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.exp-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+const projects={
+  credit:{type:'FinTech · ML',title:'Data-Driven Credit Scoring Using Explainable ML on Imbalanced Datasets',bullets:['Built credit-scoring models on the German Credit dataset using Logistic Regression, Random Forest, Gradient Boosting (LightGBM, CatBoost), and a Feedforward Neural Network.','Applied 5-fold Stratified Cross-Validation and RandomisedSearchCV with ROC-AUC as the optimisation metric.','Implemented GHOST post-hoc threshold calibration tuned for F1 and F2 objectives to serve different institutional risk profiles.','Engineered 7 domain-specific interaction features capturing liquidity, income pressure, household obligations, and creditworthiness.','TreeSHAP identified Status of Existing Checking Account, Credit Duration, and Debt Burden Index as top predictors across all models.'],tags:['Python','Gradient Boosting','Random Forest','scikit-learn','SHAP','GHOST','Stratified CV','Feature Engineering'],github:'https://github.com/roa7/DSE4212'},
+  rna:{type:'Bioinformatics · ML',title:'m6A RNA Modification Classifier',bullets:['Developed a HistGradientBoosting classifier to identify m6A RNA modifications from direct RNA-Seq data.','Applied to SG-NEx human cancer cell line datasets with end-to-end training, evaluation, and prediction workflows.','Optimised using PR-AUC and ROC-AUC to balance accuracy and interpretability on imbalanced biological data.'],tags:['Python','scikit-learn','HistGradientBoosting','RNA-Seq','Pandas','PR-AUC','ROC-AUC'],github:'https://github.com/jingzhing/DSA4262'},
+  themepark:{type:'Operations Research',title:'Data-Driven Resource Allocation for Theme Park Operations',bullets:['Led demand variability and resource allocation modelling for Universal Studios Singapore in a 10-member team (DSA3101).','Developed an optimisation framework to dynamically deploy staff based on forecasted visitor flows.','Translated model outputs into staffing recommendations to improve operational efficiency.'],tags:['Python','Optimisation','Forecasting','Pandas','Team Project','DSA3101'],github:'https://github.com/dimsumws/DSA3101-Group5'},
+  hrp:{type:'Finance · Self-Directed',title:'Portfolio Optimisation using Hierarchical Risk Parity in Python',bullets:['Self-directed: built a Python portfolio optimiser using Hierarchical Risk Parity (HRP).','Integrated yfinance for dynamic data retrieval and PyPortfolioOpt for portfolio construction.','Applied hierarchical clustering to improve robustness of risk allocation across assets.'],tags:['Python','yfinance','PyPortfolioOpt','HRP','Hierarchical Clustering','Portfolio Optimisation'],github:'https://github.com/migletdespacitos/hrp-portfolio-optimisation'},
+  cancer:{type:'ML · Healthcare',title:'Early Detection of Breast Cancer using Machine Learning',bullets:['Trained and compared KNN, Logistic Regression, and Neural Network models for early cancer detection (IT1244).','Evaluated model performance and interpretability for clinical decision support.'],tags:['Python','NumPy','Keras','scikit-learn','KNN','Logistic Regression','Neural Networks'],github:'https://github.com/migletdespacitos/ML-Early-Detection-Breast-Cancer'},
+  game:{type:'Game Dev · Hackathon',title:'A Lucid Dream (2D Game) & Book Recommender',bullets:['Developed a 2D roguelike game in Unity/C# with Firebase backend (NUS Orbital, Gemini Intermediate cert).','Built a book recommendation backend in Python/Pandas for NUS Hackers Hack&Roll 2024.'],tags:['Unity','C#','Firebase','Python','Pandas','NUS Orbital','Hack&Roll 2024'],githubGame:'https://github.com/migletdespacitos/ALucidDream-2DGame',githubBook:'https://github.com/oldonesnow/LazyBookCurator'}
+};
+
+function openProject(key){
+  const p=projects[key];
+  document.getElementById('mType').textContent=p.type;
+  document.getElementById('mTitle').textContent=p.title;
+  let html='<div class="modal-section-label">Overview</div><ul class="modal-bullets">'+p.bullets.map(b=>`<li>${b}</li>`).join('')+'</ul>';
+  html+='<div class="modal-section-label">Technologies</div><div class="modal-tags">'+p.tags.map(t=>`<span class="modal-tag">${t}</span>`).join('')+'</div>';
+  if(p.github)html+=`<a class="modal-github" href="${p.github}" target="_blank">View on GitHub ↗</a>`;
+  if(p.githubGame)html+=`<a class="modal-github" href="${p.githubGame}" target="_blank">Game on GitHub ↗</a><a class="modal-github" href="${p.githubBook}" target="_blank">Book Recommender ↗</a>`;
+  document.getElementById('mBody').innerHTML=html;
+  document.getElementById('modalOverlay').classList.add('active');
+  document.body.style.overflow='hidden';
+}
+function closeModal(e){if(e.target===document.getElementById('modalOverlay'))closeModalDirect();}
+function closeModalDirect(){document.getElementById('modalOverlay').classList.remove('active');document.body.style.overflow='';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModalDirect();});
+</script>
+</body>
+</html>
