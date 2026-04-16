@@ -459,22 +459,25 @@ footer span{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--dim);}
 const AV_API_KEY = 'KXTDUPDKG0W538XM';
 
 const avSymbols = [
-  { symbol: 'SPY', label: 'SPY', type: 'stock' },      // proxy for S&P 500
-  { symbol: 'NVDA', label: 'NVDA', type: 'stock' },
-  { symbol: 'AAPL', label: 'AAPL', type: 'stock' },
-  { symbol: 'MSFT', label: 'MSFT', type: 'stock' },
-  { symbol: 'TSLA', label: 'TSLA', type: 'stock' },
-  { symbol: 'GOOGL', label: 'GOOGL', type: 'stock' },
-  { symbol: 'META', label: 'META', type: 'stock' },
-  { symbol: 'AMZN', label: 'AMZN', type: 'stock' },
-  { symbol: 'QQQ', label: 'QQQ', type: 'stock' },   // proxy for Nasdaq
-  { symbol: 'BTC', label: 'BTC', type: 'crypto' },     // quoted in USD below
-  { symbol: 'GLD', label: 'GLD', type: 'stock' }      // proxy for gold
+  { symbol: 'NVDA', label: 'NVDA' },
+  { symbol: 'AAPL', label: 'AAPL' },
+  { symbol: 'MSFT', label: 'MSFT' },
+  { symbol: 'TSLA', label: 'TSLA' },
+  { symbol: 'GOOGL', label: 'GOOGL' },
+  { symbol: 'META', label: 'META' },
+  { symbol: 'AMZN', label: 'AMZN' },
+  { symbol: 'GLD', label: 'GLD' }
 ];
 
+const CACHE_KEY = 'ticker_cache_v1';
+
+function getTodayKey() {
+  return new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+}
+
 let tickerData = [
-  { sym: 'LOADING', val: '...', chg: '0.00%', up: true },
-  { sym: 'MIGUEL · NUS DSA', val: 'CLASS OF 2026', chg: 'OPEN TO WORK', up: true }
+  { sym:'LOADING', val:'...', chg:'0.00%', up:true },
+  { sym:'MIGUEL · NUS DSA', val:'CLASS OF 2026', chg:'OPEN TO WORK', up:true }
 ];
 
 function buildTicker() {
@@ -495,108 +498,136 @@ function renderTicker() {
   document.getElementById('ticker').innerHTML = buildTicker();
 }
 
-function formatPrice(label, price) {
-  const n = Number(price);
+function formatPrice(x) {
+  const n = Number(x);
   if (!Number.isFinite(n)) return 'N/A';
-
-  if (label === 'SPX' || label === 'NASDAQ') {
-    return n.toLocaleString(undefined, { maximumFractionDigits: 2 });
-  }
-
-  if (label === 'BTC') {
-    return `$${n.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
-  }
-
-  if (label === 'GOLD') {
-    return `$${n.toFixed(2)}`;
-  }
-
   return `$${n.toFixed(2)}`;
 }
 
-function formatPct(pct) {
-  const n = Number(pct);
+function formatPct(x) {
+  const n = Number(x);
   if (!Number.isFinite(n)) return '0.00%';
   return `${n >= 0 ? '+' : ''}${n.toFixed(2)}%`;
 }
 
-async function fetchStockQuote(symbol) {
-  const res = await fetch(
-    `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${encodeURIComponent(symbol)}&apikey=${AV_API_KEY}`
-  );
-  const data = await res.json();
-  const q = data['Global Quote'];
-
-  if (!q || !q['05. price']) return null;
-
-  return {
-    price: Number(q['05. price']),
-    changePercent: Number(String(q['10. change percent']).replace('%', ''))
-  };
-}
-
-async function fetchCryptoQuote(symbol) {
-  const res = await fetch(
-    `https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=${encodeURIComponent(symbol)}&to_currency=USD&apikey=${AV_API_KEY}`
-  );
-  const data = await res.json();
-  const q = data['Realtime Currency Exchange Rate'];
-
-  if (!q || !q['5. Exchange Rate']) return null;
-
-  return {
-    price: Number(q['5. Exchange Rate']),
-    changePercent: 0
-  };
-}
-
-async function fetchOne(item) {
+// -----------------------------
+// CACHE FUNCTIONS
+// -----------------------------
+function loadCache() {
   try {
-    const quote = item.type === 'crypto'
-      ? await fetchCryptoQuote(item.symbol)
-      : await fetchStockQuote(item.symbol);
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
 
-    if (!quote) {
-      return { sym: item.label, val: 'N/A', chg: '0.00%', up: true };
+    const parsed = JSON.parse(raw);
+    if (parsed.date === getTodayKey()) {
+      return parsed.data;
     }
-
-    return {
-      sym: item.label,
-      val: formatPrice(item.label, quote.price),
-      chg: formatPct(quote.changePercent),
-      up: quote.changePercent >= 0
-    };
-  } catch (err) {
-    return { sym: item.label, val: 'N/A', chg: '0.00%', up: true };
+    return null;
+  } catch {
+    return null;
   }
 }
 
+function saveCache(data) {
+  localStorage.setItem(CACHE_KEY, JSON.stringify({
+    date: getTodayKey(),
+    data
+  }));
+}
+
+// -----------------------------
+// FETCH DAILY CLOSE
+// -----------------------------
+async function fetchDailyClose(symbol) {
+  const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${encodeURIComponent(symbol)}&outputsize=compact&apikey=${AV_API_KEY}`;
+  
+  const res = await fetch(url);
+  const data = await res.json();
+
+  if (data.Note || data.Information || data['Error Message']) {
+    console.warn('Alpha Vantage limit hit:', data);
+    return null;
+  }
+
+  const series = data['Time Series (Daily)'];
+  if (!series) return null;
+
+  const dates = Object.keys(series).sort().reverse();
+  if (dates.length < 2) return null;
+
+  const latest = series[dates[0]];
+  const prev = series[dates[1]];
+
+  const latestClose = Number(latest['4. close']);
+  const prevClose = Number(prev['4. close']);
+
+  if (!Number.isFinite(latestClose) || !Number.isFinite(prevClose)) return null;
+
+  const pctChange = ((latestClose - prevClose) / prevClose) * 100;
+
+  return {
+    price: latestClose,
+    changePercent: pctChange
+  };
+}
+
+// -----------------------------
+// MAIN UPDATE FUNCTION
+// -----------------------------
 async function updateTickerData() {
+  const cached = loadCache();
+
+  if (cached) {
+    tickerData = [
+      ...cached,
+      { sym:'MIGUEL · NUS DSA', val:'CLASS OF 2026', chg:'OPEN TO WORK', up:true }
+    ];
+    renderTicker();
+    return;
+  }
+
   try {
-    const liveData = await Promise.all(avSymbols.map(fetchOne));
+    const liveData = [];
+
+    for (const item of avSymbols) {
+      const q = await fetchDailyClose(item.symbol);
+
+      if (q) {
+        liveData.push({
+          sym: item.label,
+          val: formatPrice(q.price),
+          chg: formatPct(q.changePercent),
+          up: q.changePercent >= 0
+        });
+      }
+
+      // avoid rate limit
+      await new Promise(r => setTimeout(r, 1200));
+    }
+
+    saveCache(liveData);
 
     tickerData = [
       ...liveData,
-      { sym: 'MIGUEL · NUS DSA', val: 'CLASS OF 2026', chg: 'OPEN TO WORK', up: true }
+      { sym:'MIGUEL · NUS DSA', val:'CLASS OF 2026', chg:'OPEN TO WORK', up:true }
     ];
 
     renderTicker();
   } catch (err) {
-    console.error('Ticker update failed:', err);
+    console.error(err);
 
     tickerData = [
-      { sym: 'MARKET DATA', val: 'UNAVAILABLE', chg: 'RETRYING', up: false },
-      { sym: 'MIGUEL · NUS DSA', val: 'CLASS OF 2026', chg: 'OPEN TO WORK', up: true }
+      { sym:'MARKET DATA', val:'FAILED', chg:'TRY TOMORROW', up:false },
+      { sym:'MIGUEL · NUS DSA', val:'CLASS OF 2026', chg:'OPEN TO WORK', up:true }
     ];
 
     renderTicker();
   }
 }
 
+// -----------------------------
 renderTicker();
 updateTickerData();
-
-setInterval(updateTickerData, 5 * 60 * 1000);
 
 // TYPEWRITER
 const phrases=['Hi, I am Miguel Viloria.','Data Scientist.','ML Specialist.','Aspiring Quant Researcher.','NUS DSA · Class of 2026.'];
