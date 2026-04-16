@@ -453,70 +453,31 @@ footer span{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--dim);}
 
 <script>
 // REAL TICKER DATA
-const yahooSymbols = [
-  'NVDA',
-  'AAPL',
-  'MSFT',
-  'TSLA',
-  'GOOGL',
-  'META',
-  'AMZN',
-  'BTC-USD',
-  '^VIX',
-  '^GSPC',
-  '^IXIC',
-  'GC=F',
-  '^TNX'
+<script>
+// -----------------------------
+// ALPHA VANTAGE LIVE TICKER
+// -----------------------------
+
+const AV_API_KEY = 'KXTDUPDKG0W538XM';
+
+const avSymbols = [
+  { symbol: 'SPY', label: 'SPY', type: 'stock' },      // proxy for S&P 500
+  { symbol: 'NVDA', label: 'NVDA', type: 'stock' },
+  { symbol: 'AAPL', label: 'AAPL', type: 'stock' },
+  { symbol: 'MSFT', label: 'MSFT', type: 'stock' },
+  { symbol: 'TSLA', label: 'TSLA', type: 'stock' },
+  { symbol: 'GOOGL', label: 'GOOGL', type: 'stock' },
+  { symbol: 'META', label: 'META', type: 'stock' },
+  { symbol: 'AMZN', label: 'AMZN', type: 'stock' },
+  { symbol: 'QQQ', label: 'QQQ', type: 'stock' },   // proxy for Nasdaq
+  { symbol: 'BTC', label: 'BTC', type: 'crypto' },     // quoted in USD below
+  { symbol: 'GLD', label: 'GLD', type: 'stock' }      // proxy for gold
 ];
 
 let tickerData = [
-  { sym:'LOADING', val:'...', chg:'0.00%', up:true },
-  { sym:'MIGUEL · NUS DSA', val:'CLASS OF 2026', chg:'OPEN TO WORK', up:true },
+  { sym: 'LOADING', val: '...', chg: '0.00%', up: true },
+  { sym: 'MIGUEL · NUS DSA', val: 'CLASS OF 2026', chg: 'OPEN TO WORK', up: true }
 ];
-
-function formatValue(symbol, price) {
-  if (price == null || Number.isNaN(price)) return 'N/A';
-
-  if (symbol === '^GSPC' || symbol === '^IXIC') {
-    return Number(price).toLocaleString(undefined, { maximumFractionDigits: 0 });
-  }
-
-  if (symbol === '^VIX') {
-    return Number(price).toFixed(2);
-  }
-
-  if (symbol === '^TNX') {
-    return `${(Number(price) / 10).toFixed(2)}%`;
-  }
-
-  if (symbol === 'GC=F') {
-    return `$${Number(price).toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
-  }
-
-  if (symbol === 'BTC-USD') {
-    return `$${Number(price).toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
-  }
-
-  return `$${Number(price).toFixed(2)}`;
-}
-
-function displaySymbol(symbol) {
-  const map = {
-    '^GSPC': 'SPX',
-    '^IXIC': 'NASDAQ',
-    '^VIX': 'VIX',
-    'BTC-USD': 'BTC',
-    'GC=F': 'GOLD',
-    '^TNX': '10Y UST'
-  };
-  return map[symbol] || symbol;
-}
-
-function formatChangePercent(changePercent) {
-  if (changePercent == null || Number.isNaN(changePercent)) return '0.00%';
-  const sign = changePercent >= 0 ? '+' : '';
-  return `${sign}${changePercent.toFixed(2)}%`;
-}
 
 function buildTicker() {
   const doubled = [...tickerData, ...tickerData];
@@ -536,45 +497,89 @@ function renderTicker() {
   document.getElementById('ticker').innerHTML = buildTicker();
 }
 
-async function fetchYahooQuotes() {
-  const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(yahooSymbols.join(','))}`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+function formatPrice(label, price) {
+  const n = Number(price);
+  if (!Number.isFinite(n)) return 'N/A';
 
+  if (label === 'SPX' || label === 'NASDAQ') {
+    return n.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  }
+
+  if (label === 'BTC') {
+    return `$${n.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+  }
+
+  if (label === 'GOLD') {
+    return `$${n.toFixed(2)}`;
+  }
+
+  return `$${n.toFixed(2)}`;
+}
+
+function formatPct(pct) {
+  const n = Number(pct);
+  if (!Number.isFinite(n)) return '0.00%';
+  return `${n >= 0 ? '+' : ''}${n.toFixed(2)}%`;
+}
+
+async function fetchStockQuote(symbol) {
+  const res = await fetch(
+    `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${encodeURIComponent(symbol)}&apikey=${AV_API_KEY}`
+  );
   const data = await res.json();
-  return data?.quoteResponse?.result || [];
+  const q = data['Global Quote'];
+
+  if (!q || !q['05. price']) return null;
+
+  return {
+    price: Number(q['05. price']),
+    changePercent: Number(String(q['10. change percent']).replace('%', ''))
+  };
+}
+
+async function fetchCryptoQuote(symbol) {
+  const res = await fetch(
+    `https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=${encodeURIComponent(symbol)}&to_currency=USD&apikey=${AV_API_KEY}`
+  );
+  const data = await res.json();
+  const q = data['Realtime Currency Exchange Rate'];
+
+  if (!q || !q['5. Exchange Rate']) return null;
+
+  return {
+    price: Number(q['5. Exchange Rate']),
+    changePercent: 0
+  };
+}
+
+async function fetchOne(item) {
+  try {
+    const quote = item.type === 'crypto'
+      ? await fetchCryptoQuote(item.symbol)
+      : await fetchStockQuote(item.symbol);
+
+    if (!quote) {
+      return { sym: item.label, val: 'N/A', chg: '0.00%', up: true };
+    }
+
+    return {
+      sym: item.label,
+      val: formatPrice(item.label, quote.price),
+      chg: formatPct(quote.changePercent),
+      up: quote.changePercent >= 0
+    };
+  } catch (err) {
+    return { sym: item.label, val: 'N/A', chg: '0.00%', up: true };
+  }
 }
 
 async function updateTickerData() {
   try {
-    const quotes = await fetchYahooQuotes();
-
-    const liveData = yahooSymbols.map(symbol => {
-      const q = quotes.find(item => item.symbol === symbol);
-
-      if (!q) {
-        return {
-          sym: displaySymbol(symbol),
-          val: 'N/A',
-          chg: '0.00%',
-          up: true
-        };
-      }
-
-      const price = q.regularMarketPrice;
-      const changePct = q.regularMarketChangePercent;
-
-      return {
-        sym: displaySymbol(symbol),
-        val: formatValue(symbol, price),
-        chg: formatChangePercent(changePct),
-        up: (changePct ?? 0) >= 0
-      };
-    });
+    const liveData = await Promise.all(avSymbols.map(fetchOne));
 
     tickerData = [
       ...liveData,
-      { sym:'MIGUEL · NUS DSA', val:'CLASS OF 2026', chg:'OPEN TO WORK', up:true },
+      { sym: 'MIGUEL · NUS DSA', val: 'CLASS OF 2026', chg: 'OPEN TO WORK', up: true }
     ];
 
     renderTicker();
@@ -582,20 +587,19 @@ async function updateTickerData() {
     console.error('Ticker update failed:', err);
 
     tickerData = [
-      { sym:'MARKET DATA', val:'UNAVAILABLE', chg:'RETRYING', up:false },
-      { sym:'MIGUEL · NUS DSA', val:'CLASS OF 2026', chg:'OPEN TO WORK', up:true },
+      { sym: 'MARKET DATA', val: 'UNAVAILABLE', chg: 'RETRYING', up: false },
+      { sym: 'MIGUEL · NUS DSA', val: 'CLASS OF 2026', chg: 'OPEN TO WORK', up: true }
     ];
 
     renderTicker();
   }
 }
 
-// initial render
 renderTicker();
 updateTickerData();
 
-// refresh every 60 seconds
-setInterval(updateTickerData, 60000);
+setInterval(updateTickerData, 5 * 60 * 1000);
+</script>
 
 // TYPEWRITER
 const phrases=['Hi, I am Miguel Viloria.','Data Scientist.','ML Specialist.','Aspiring Quant Researcher.','NUS DSA · Class of 2026.'];
