@@ -452,28 +452,150 @@ footer span{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--dim);}
 </footer>
 
 <script>
-// REAL TICKER DATA (prices from early April 2026)
-const tickerData=[
-  {sym:'SPX',val:'6,720',chg:'+0.31%',up:true},
-  {sym:'NVDA',val:'$177.39',chg:'+0.93%',up:true},
-  {sym:'AAPL',val:'$255.92',chg:'+0.11%',up:true},
-  {sym:'MSFT',val:'$373.46',chg:'+1.11%',up:true},
-  {sym:'TSLA',val:'$360.59',chg:'+5.42%',up:true},
-  {sym:'GOOGL',val:'$295.77',chg:'+0.54%',up:true},
-  {sym:'META',val:'$617.45',chg:'-0.82%',up:false},
-  {sym:'AMZN',val:'$209.77',chg:'+0.38%',up:true},
-  {sym:'VIX',val:'22.26',chg:'-5.31%',up:false},
-  {sym:'BTC',val:'$74,592',chg:'+0.56%',up:true},
-  {sym:'10Y UST',val:'4.20%',chg:'-0.43%',up:false},
-  {sym:'NASDAQ',val:'22,477',chg:'+0.46%',up:true},
-  {sym:'GOLD',val:'$3,103',chg:'+0.90%',up:true},
-  {sym:'MIGUEL · NUS DSA',val:'CLASS OF 2026',chg:'OPEN TO WORK',up:true},
+// REAL TICKER DATA
+const yahooSymbols = [
+  'NVDA',
+  'AAPL',
+  'MSFT',
+  'TSLA',
+  'GOOGL',
+  'META',
+  'AMZN',
+  'BTC-USD',
+  '^VIX',
+  '^GSPC',
+  '^IXIC',
+  'GC=F',
+  '^TNX'
 ];
-function buildTicker(){
-  const doubled=[...tickerData,...tickerData];
-  return doubled.map(t=>`<span class="ticker-item"><span class="ticker-sym">${t.sym}</span> ${t.val} <span class="${t.up?'t-up':'t-dn'}">${t.up?'▲':'▼'} ${t.chg}</span><span class="ticker-sep">|</span></span>`).join('');
+
+let tickerData = [
+  { sym:'LOADING', val:'...', chg:'0.00%', up:true },
+  { sym:'MIGUEL · NUS DSA', val:'CLASS OF 2026', chg:'OPEN TO WORK', up:true },
+];
+
+function formatValue(symbol, price) {
+  if (price == null || Number.isNaN(price)) return 'N/A';
+
+  if (symbol === '^GSPC' || symbol === '^IXIC') {
+    return Number(price).toLocaleString(undefined, { maximumFractionDigits: 0 });
+  }
+
+  if (symbol === '^VIX') {
+    return Number(price).toFixed(2);
+  }
+
+  if (symbol === '^TNX') {
+    return `${(Number(price) / 10).toFixed(2)}%`;
+  }
+
+  if (symbol === 'GC=F') {
+    return `$${Number(price).toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+  }
+
+  if (symbol === 'BTC-USD') {
+    return `$${Number(price).toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+  }
+
+  return `$${Number(price).toFixed(2)}`;
 }
-document.getElementById('ticker').innerHTML=buildTicker();
+
+function displaySymbol(symbol) {
+  const map = {
+    '^GSPC': 'SPX',
+    '^IXIC': 'NASDAQ',
+    '^VIX': 'VIX',
+    'BTC-USD': 'BTC',
+    'GC=F': 'GOLD',
+    '^TNX': '10Y UST'
+  };
+  return map[symbol] || symbol;
+}
+
+function formatChangePercent(changePercent) {
+  if (changePercent == null || Number.isNaN(changePercent)) return '0.00%';
+  const sign = changePercent >= 0 ? '+' : '';
+  return `${sign}${changePercent.toFixed(2)}%`;
+}
+
+function buildTicker() {
+  const doubled = [...tickerData, ...tickerData];
+  return doubled.map(t => `
+    <span class="ticker-item">
+      <span class="ticker-sym">${t.sym}</span>
+      ${t.val}
+      <span class="${t.up ? 't-up' : 't-dn'}">
+        ${t.up ? '▲' : '▼'} ${t.chg}
+      </span>
+      <span class="ticker-sep">|</span>
+    </span>
+  `).join('');
+}
+
+function renderTicker() {
+  document.getElementById('ticker').innerHTML = buildTicker();
+}
+
+async function fetchYahooQuotes() {
+  const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(yahooSymbols.join(','))}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+  const data = await res.json();
+  return data?.quoteResponse?.result || [];
+}
+
+async function updateTickerData() {
+  try {
+    const quotes = await fetchYahooQuotes();
+
+    const liveData = yahooSymbols.map(symbol => {
+      const q = quotes.find(item => item.symbol === symbol);
+
+      if (!q) {
+        return {
+          sym: displaySymbol(symbol),
+          val: 'N/A',
+          chg: '0.00%',
+          up: true
+        };
+      }
+
+      const price = q.regularMarketPrice;
+      const changePct = q.regularMarketChangePercent;
+
+      return {
+        sym: displaySymbol(symbol),
+        val: formatValue(symbol, price),
+        chg: formatChangePercent(changePct),
+        up: (changePct ?? 0) >= 0
+      };
+    });
+
+    tickerData = [
+      ...liveData,
+      { sym:'MIGUEL · NUS DSA', val:'CLASS OF 2026', chg:'OPEN TO WORK', up:true },
+    ];
+
+    renderTicker();
+  } catch (err) {
+    console.error('Ticker update failed:', err);
+
+    tickerData = [
+      { sym:'MARKET DATA', val:'UNAVAILABLE', chg:'RETRYING', up:false },
+      { sym:'MIGUEL · NUS DSA', val:'CLASS OF 2026', chg:'OPEN TO WORK', up:true },
+    ];
+
+    renderTicker();
+  }
+}
+
+// initial render
+renderTicker();
+updateTickerData();
+
+// refresh every 60 seconds
+setInterval(updateTickerData, 60000);
 
 // TYPEWRITER
 const phrases=['Hi, I am Miguel Viloria.','Data Scientist.','ML Specialist.','Aspiring Quant Researcher.','NUS DSA · Class of 2026.'];
