@@ -304,7 +304,7 @@ footer span{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--dim);}
       <div class="hero-avail"><span class="avail-dot"></span>Graduating July 2026</div>
       <div class="hero-name">Miguel<br><span>Viloria</span></div>
       <div class="hero-typewriter"><span id="typewriter"></span><span class="cursor"></span></div>
-      <p class="hero-desc">Data Science &amp; Analytics graduate from NUS. I build ML pipelines, research regime-adaptive trading models, and deploy AI-enabled tools — working at the intersection of data science, quantitative finance, and a healthy obsession with race strategy.</p>
+      <p class="hero-desc">Data Science &amp; Analytics graduate from NUS. I build ML pipelines, research regime-adaptive trading models, and deploy AI-enabled tools — working at the intersection of data science and quantitative finance.</p>
       <div class="hero-btns">
         <button class="btn-green" onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">View My Work</button>
         <button class="btn-outline-g" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get in Touch</button>
@@ -517,8 +517,7 @@ const CACHE_KEY = 'ticker_cache_v1';
 
 // Static "pit wall" markers appended after the live market data
 const PERSONAL_ITEMS = [
-  { sym:'MIGUEL · NUS DSA', val:'CLASS OF 2026', chg:'OPEN TO WORK', up:true },
-  { sym:'PIT WALL', val:'LIGHTS OUT', chg:'AND AWAY WE GO', up:true }
+  { sym:'MIGUEL · NUS DSA', val:'CLASS OF 2026', chg:'OPEN TO WORK', up:true }
 ];
 
 function getTodayKey() {
@@ -680,7 +679,7 @@ renderTicker();
 updateTickerData();
 
 // TYPEWRITER
-const phrases=['Hi, I am Miguel Viloria.','Data Scientist.','ML Engineer.','Aspiring Quant Researcher.','Pit-wall strategist in Python.','NUS DSA · Class of 2026.'];
+const phrases=['Hi, I am Miguel Viloria.','Data Scientist.','ML Engineer.','Aspiring Quant Researcher.','NUS DSA · Class of 2026.'];
 let pi=0,ci=0,deleting=false,tw=document.getElementById('typewriter');
 function type(){
   const phrase=phrases[pi];
