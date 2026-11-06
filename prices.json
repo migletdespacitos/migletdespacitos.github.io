@@ -1,0 +1,61 @@
+{
+  "as_of": "2026-11-05",
+  "quotes": [
+    {
+      "symbol": "NVDA",
+      "date": "2026-11-05",
+      "close": 181.6,
+      "prev_close": 200.13,
+      "change_pct": -9.26
+    },
+    {
+      "symbol": "VOO",
+      "date": "2026-11-05",
+      "close": 673.97,
+      "prev_close": 704.78,
+      "change_pct": -4.37
+    },
+    {
+      "symbol": "MSFT",
+      "date": "2026-11-05",
+      "close": 535.93,
+      "prev_close": 555.8,
+      "change_pct": -3.58
+    },
+    {
+      "symbol": "SMH",
+      "date": "2026-11-05",
+      "close": 447.73,
+      "prev_close": 504.27,
+      "change_pct": -11.21
+    },
+    {
+      "symbol": "GOOGL",
+      "date": "2026-11-05",
+      "close": 282.57,
+      "prev_close": 288.93,
+      "change_pct": -2.2
+    },
+    {
+      "symbol": "QQQ",
+      "date": "2026-11-05",
+      "close": 647.05,
+      "prev_close": 691.95,
+      "change_pct": -6.49
+    },
+    {
+      "symbol": "AMZN",
+      "date": "2026-11-05",
+      "close": 260.21,
+      "prev_close": 266.03,
+      "change_pct": -2.19
+    },
+    {
+      "symbol": "AMD",
+      "date": "2026-11-05",
+      "close": 404.4,
+      "prev_close": 488.78,
+      "change_pct": -17.26
+    }
+  ]
+}
