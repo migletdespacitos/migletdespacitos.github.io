@@ -43,10 +43,13 @@ body{
   overflow-x:hidden;
 }
 
-/* TICKER — timing tower */
-.ticker-wrap{background:#080b08;border-bottom:1px solid var(--border);border-top:2px solid var(--papaya2);overflow:hidden;padding:0.35rem 0;position:fixed;top:0;left:0;right:0;z-index:200;}
-.ticker-wrap::before{content:'LIVE';position:absolute;left:0;top:0;bottom:0;z-index:2;display:flex;align-items:center;padding:0 0.7rem;font-family:var(--race);font-weight:700;font-size:0.6rem;letter-spacing:0.14em;color:#fff;background:var(--race-red);}
-.ticker-track{display:flex;width:max-content;animation:ticker 40s linear infinite;padding-left:3rem;}
+/* TICKER — last close (data from prices.json, refreshed daily by a GitHub Action) */
+.ticker-wrap{display:none;background:#080b08;border-bottom:1px solid var(--border);border-top:2px solid var(--papaya2);overflow:hidden;padding:0.35rem 0;position:fixed;top:0;left:0;right:0;z-index:200;}
+body.has-ticker .ticker-wrap{display:block;}
+body.has-ticker nav{top:30px;}
+.ticker-badge{position:absolute;left:0;top:0;bottom:0;z-index:2;display:flex;align-items:center;gap:0.45rem;padding:0 0.75rem;font-family:var(--race);font-weight:700;font-size:0.6rem;letter-spacing:0.14em;color:#160a00;background:var(--papaya);}
+.ticker-badge span{font-family:'DM Mono',monospace;font-weight:500;letter-spacing:0.04em;opacity:0.75;}
+.ticker-track{display:flex;width:max-content;animation:ticker 40s linear infinite;padding-left:9rem;}
 .ticker-item{font-family:'DM Mono',monospace;font-size:0.7rem;padding:0 2rem;white-space:nowrap;display:flex;align-items:center;gap:0.55rem;color:var(--muted);}
 .ticker-sym{color:var(--text);font-weight:500;}
 .t-up{color:var(--up);}
@@ -55,7 +58,7 @@ body{
 @keyframes ticker{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
 
 /* NAV */
-nav{position:fixed;top:30px;left:0;right:0;z-index:100;padding:0.9rem 3rem;display:flex;justify-content:space-between;align-items:center;background:rgba(10,13,10,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0.9rem 3rem;display:flex;justify-content:space-between;align-items:center;background:rgba(10,13,10,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
 .nav-name{font-size:0.86rem;font-weight:700;color:var(--up);letter-spacing:0.06em;font-family:var(--race);display:flex;align-items:center;gap:0.5rem;}
 .nav-name::before{content:'';width:9px;height:9px;background:var(--papaya);transform:skewX(-16deg);display:inline-block;}
 .nav-links{display:flex;gap:1.75rem;align-items:center;}
@@ -96,6 +99,16 @@ section{padding:5rem 3rem;position:relative;}
 .hero-stat:last-child{border-right:none;}
 .hero-stat-num{font-size:1.35rem;font-weight:800;color:var(--up);letter-spacing:-0.02em;font-family:'DM Mono',monospace;}
 .hero-stat-label{font-family:var(--race);font-weight:500;font-size:0.58rem;color:var(--dim);letter-spacing:0.08em;text-transform:uppercase;margin-top:0.1rem;}
+
+/* 3D VOL SURFACE (hero background) */
+#volsurf{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity 1.2s ease;}
+#volsurf.ready{opacity:1;}
+#volsurf canvas{display:block;width:100%!important;height:100%!important;}
+#hero::before{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(10,13,10,0.96) 0%,rgba(10,13,10,0.8) 38%,rgba(10,13,10,0.1) 70%),linear-gradient(0deg,var(--bg) 0%,transparent 22%);}
+.vol-hud{position:absolute;right:3rem;bottom:1.6rem;z-index:2;font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--dim);letter-spacing:0.06em;text-align:right;line-height:1.7;pointer-events:none;}
+.vol-hud b{font-family:var(--race);font-weight:600;color:var(--muted);letter-spacing:0.12em;}
+.vol-hud .reg{color:var(--up);transition:color 0.6s;}
+.vol-hud .reg.stress{color:var(--dn);}
 
 /* META */
 .meta-strip{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg2);}
@@ -246,12 +259,18 @@ footer span{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--dim);}
 }
 
 @media(max-width:720px){
-  nav{padding:0.85rem 1.25rem;top:28px;}
-  .nav-links{gap:0.8rem;}
+  nav{padding:0.85rem 1.25rem;}
+  body.has-ticker nav{top:28px;}
+  .nav-name{white-space:nowrap;flex-shrink:0;}
+  .nav-links{gap:0.8rem;overflow-x:auto;scrollbar-width:none;margin-left:1rem;}
+  .nav-links::-webkit-scrollbar{display:none;}
+  .nav-links a{white-space:nowrap;}
   .nav-links a{font-size:0.66rem;}
   section{padding:3.5rem 1.25rem;}
   #hero{padding:7rem 1.25rem 3rem;min-height:unset;}
   #hero::after{display:none;}
+  #hero::before{background:linear-gradient(0deg,rgba(10,13,10,0.95) 0%,rgba(10,13,10,0.7) 55%,rgba(10,13,10,0.35) 100%);}
+  .vol-hud{right:1.25rem;bottom:1rem;}
   .hero-inner{grid-template-columns:1fr;}
   .hero-right{order:-1;}
   .hero-photo{width:140px;height:140px;}
@@ -278,8 +297,9 @@ footer span{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--dim);}
   </div>
 </div>
 
-<!-- TICKER -->
-<div class="ticker-wrap">
+<!-- TICKER (last close) -->
+<div class="ticker-wrap" aria-label="Last closing prices">
+  <div class="ticker-badge">LAST CLOSE <span id="tickerDate"></span></div>
   <div class="ticker-track" id="ticker"></div>
 </div>
 
@@ -298,6 +318,8 @@ footer span{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--dim);}
 </nav>
 
 <section id="hero">
+  <div id="volsurf" aria-hidden="true"></div>
+  <div class="vol-hud" aria-hidden="true"><b>σ(K,T) · HESTON-STYLE IV SURFACE</b><br>REGIME <span class="reg" id="volReg">CALM</span> · ATM 1Y <span id="volAtm">—</span></div>
   <div class="hero-inner">
     <div>
       <div class="hero-label">Portfolio</div>
@@ -315,9 +337,9 @@ footer span{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--dim);}
         <img src="https://i.imgur.com/ZJJk1XG.jpeg" alt="Miguel Viloria" onerror="this.parentElement.innerHTML='<div style=\'padding:2rem;text-align:center;font-family:DM Mono,monospace;font-size:0.7rem;color:#4a6a4a\'>Photo loading…</div>'">
       </div>
       <div class="hero-stats">
-        <div class="hero-stat"><div class="hero-stat-num">8</div><div class="hero-stat-label">Projects</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">7</div><div class="hero-stat-label">Projects</div></div>
         <div class="hero-stat"><div class="hero-stat-num">1</div><div class="hero-stat-label">Internships</div></div>
-        <div class="hero-stat"><div class="hero-stat-num">2</div><div class="hero-stat-label">Writings</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">1</div><div class="hero-stat-label">Writings</div></div>
       </div>
     </div>
   </div>
@@ -351,6 +373,18 @@ footer span{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--dim);}
     </div>
     <div class="exp-panel" id="tab-work">
       <div class="exp-list">
+        <div class="exp-item">
+          <div>
+            <div class="exp-role">Research Collaborator, Regime-Adaptive Deep Hedging</div>
+            <div class="exp-org">National University of Singapore</div>
+            <ul class="exp-bullets">
+              <li>Extending honours thesis into working paper on regime-adaptive deep hedging of options under Heston stochastic volatility</li>
+              <li>Contributing to Python research codebase in which a meta-model routes between regime-specialised deep hedgers</li>
+              <li>Prioritising clearer regime distinctions and stronger classification features to show meta-model’s advantage in crises</li>
+            </ul>
+          </div>
+          <div class="exp-date">May 2026 – Present</div>
+        </div>
         <div class="exp-item">
           <div>
             <div class="exp-role">Data &amp; AI Intern</div>
@@ -400,12 +434,11 @@ footer span{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--dim);}
   <div class="container">
     <div class="section-header"><span class="sector-bar"><i></i><i></i><i></i></span><span class="section-label">Projects</span><div class="section-line"></div></div>
     <div class="projects-grid">
+      <div class="project-card" onclick="openProject('engine')"><span class="project-arrow">↗</span><div class="project-type">Quant Finance · Deployed App</div><div class="project-title">Portfolio Optimisation Engine</div><div class="project-desc">Deployed Streamlit app that allocates any ticker universe by blending HRP and regime-conditioned Black-Litterman, with a globally convergent Max-Sharpe solve in CVXPY.</div><div class="project-stack"><span class="tag">Python</span><span class="tag">Streamlit</span><span class="tag">CVXPY</span><span class="tag">HRP</span><span class="tag">Black-Litterman</span></div></div>
       <div class="project-card" onclick="openProject('f1')"><span class="project-arrow">↗</span><div class="project-type">Motorsport · Data</div><div class="project-title">F1 Pit Strategy Simulator</div><div class="project-desc">Interactive Streamlit app on FastF1 data that simulates pit stops, projects a driver's rejoin position, and maps traffic threats like dirty air and rejoin clashes.</div><div class="project-stack"><span class="tag">Python</span><span class="tag">Streamlit</span><span class="tag">FastF1</span><span class="tag">Pandas</span></div></div>
-      <div class="project-card" onclick="openProject('fiscaldml')"><span class="project-arrow">↗</span><div class="project-type">Public Policy · Causal ML</div><div class="project-title">Sectoral Fiscal Multipliers via Double ML</div><div class="project-desc">Double Machine Learning pipeline on SingStat/MAS macro data that orthogonalises sectoral government spending against lagged rates and inflation, isolating unanticipated fiscal shocks to estimate causal multipliers on GDP growth.</div><div class="project-stack"><span class="tag">Python</span><span class="tag">scikit-learn</span><span class="tag">statsmodels</span><span class="tag">Pandas</span></div></div>
       <div class="project-card" onclick="openProject('credit')"><span class="project-arrow">↗</span><div class="project-type">FinTech · ML</div><div class="project-title">Credit Risk Modelling with Explainable ML</div><div class="project-desc">Credit-scoring models on imbalanced data with GHOST threshold calibration and SHAP interpretability.</div><div class="project-stack"><span class="tag">Python</span><span class="tag">Gradient Boosting</span><span class="tag">SHAP</span><span class="tag">scikit-learn</span></div></div>
       <div class="project-card" onclick="openProject('rna')"><span class="project-arrow">↗</span><div class="project-type">Bioinformatics · ML</div><div class="project-title">m6A RNA Modification Classifier</div><div class="project-desc">HistGradientBoosting classifier for m6A modifications from RNA-Seq data on SG-NEx cancer cell lines.</div><div class="project-stack"><span class="tag">Python</span><span class="tag">scikit-learn</span><span class="tag">RNA-Seq</span><span class="tag">Pandas</span></div></div>
       <div class="project-card" onclick="openProject('themepark')"><span class="project-arrow">↗</span><div class="project-type">Operations Research</div><div class="project-title">Theme Park Resource Allocation</div><div class="project-desc">Demand modelling and staff optimisation for Universal Studios Singapore using forecasted visitor flows.</div><div class="project-stack"><span class="tag">Python</span><span class="tag">Optimisation</span><span class="tag">Forecasting</span><span class="tag">Pandas</span></div></div>
-      <div class="project-card" onclick="openProject('hrp')"><span class="project-arrow">↗</span><div class="project-type">Finance · Self-Directed</div><div class="project-title">Portfolio Optimisation via Hierarchical Risk Parity</div><div class="project-desc">Python portfolio optimiser using HRP with yfinance and PyPortfolioOpt for robust risk allocation.</div><div class="project-stack"><span class="tag">Python</span><span class="tag">yfinance</span><span class="tag">PyPortfolioOpt</span><span class="tag">HRP</span></div></div>
       <div class="project-card" onclick="openProject('cancer')"><span class="project-arrow">↗</span><div class="project-type">ML · Healthcare</div><div class="project-title">Early Breast Cancer Detection</div><div class="project-desc">KNN, Logistic Regression, and Neural Network models for early cancer detection using medical datasets.</div><div class="project-stack"><span class="tag">Python</span><span class="tag">NumPy</span><span class="tag">Keras</span><span class="tag">scikit-learn</span></div></div>
       <div class="project-card" onclick="openProject('game')"><span class="project-arrow">↗</span><div class="project-type">Game Dev · Hackathon</div><div class="project-title">A Lucid Dream &amp; Book Recommender</div><div class="project-desc">2D roguelike game (NUS Orbital, Gemini cert) and a book recommendation backend from Hack&amp;Roll 2024.</div><div class="project-stack"><span class="tag">Unity</span><span class="tag">C#</span><span class="tag">Firebase</span><span class="tag">Python</span></div></div>
     </div>
@@ -442,7 +475,6 @@ footer span{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--dim);}
     <div class="section-header"><span class="sector-bar"><i></i><i></i><i></i></span><span class="section-label">Writings</span><div class="section-line"></div></div>
     <div class="writings-list">
       <a class="writing-item" href="https://medium.com/@miko232411/building-a-pit-wall-in-python-simulating-f1-strategy-calls-with-fastf1-c59405f435bf" target="_blank"><div><div class="writing-title">Building a Pit Wall in Python: Simulating F1 Strategy Calls with FastF1</div><div class="writing-sub">Turning FastF1 telemetry into a pit-wall model that projects rejoin positions and weighs the call to box</div></div><div class="writing-arrow">↗</div></a>
-      <a class="writing-item" href="https://medium.com/@miko232411/building-a-causal-ml-pipeline-to-test-singapores-national-budget-1640ca3889b3" target="_blank"><div><div class="writing-title">Building a Causal ML Pipeline to Test Singapore's National Budget</div><div class="writing-sub">Using Double Machine Learning to isolate sectoral fiscal multipliers from Singapore's spending data</div></div><div class="writing-arrow">↗</div></a>
     </div>
   </div>
 </section>
@@ -489,187 +521,27 @@ footer span{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--dim);}
 </footer>
 
 <script>
-// -----------------------------
-// ALPHA VANTAGE LIVE TICKER
-// -----------------------------
-
-const AV_API_KEY = 'KXTDUPDKG0W538XM';
-
-const avSymbols = [
-  { symbol: 'NVDA', label: 'NVDA' },
-  { symbol: 'VOO', label: 'VOO' },
-  { symbol: 'MSFT', label: 'MSFT' },
-  { symbol: 'SMH', label: 'SMH' },
-  { symbol: 'GOOGL', label: 'GOOGL' },
-  { symbol: 'TSM', label: 'TSM' },
-  { symbol: 'MU', label: 'MU' },
-  { symbol: 'AMD', label: 'AMD' }
-];
-
-const CACHE_KEY = 'ticker_cache_v1';
-
-// Static "pit wall" markers appended after the live market data
-const PERSONAL_ITEMS = [
-  { sym:'MIGUEL · NUS DSA', val:'CLASS OF 2026', chg:'OPEN TO WORK', up:true }
-];
-
-function getTodayKey() {
-  return new Date().toISOString().slice(0, 10); // YYYY-MM-DD
-}
-
-let tickerData = [
-  { sym:'LOADING', val:'...', chg:'0.00%', up:true },
-  ...PERSONAL_ITEMS
-];
-
-function buildTicker() {
-  const doubled = [...tickerData, ...tickerData];
-  return doubled.map(t => `
-    <span class="ticker-item">
-      <span class="ticker-sym">${t.sym}</span>
-      ${t.val}
-      <span class="${t.up ? 't-up' : 't-dn'}">
-        ${t.up ? '▲' : '▼'} ${t.chg}
-      </span>
-      <span class="ticker-sep">|</span>
-    </span>
-  `).join('');
-}
-
-function renderTicker() {
-  document.getElementById('ticker').innerHTML = buildTicker();
-}
-
-function formatPrice(x) {
-  const n = Number(x);
-  if (!Number.isFinite(n)) return 'N/A';
-  return `$${n.toFixed(2)}`;
-}
-
-function formatPct(x) {
-  const n = Number(x);
-  if (!Number.isFinite(n)) return '0.00%';
-  return `${n >= 0 ? '+' : ''}${n.toFixed(2)}%`;
-}
-
-// -----------------------------
-// CACHE FUNCTIONS
-// -----------------------------
-function loadCache() {
-  try {
-    const raw = localStorage.getItem(CACHE_KEY);
-    if (!raw) return null;
-
-    const parsed = JSON.parse(raw);
-    if (parsed.date === getTodayKey()) {
-      return parsed.data;
+// LAST-CLOSE TICKER — reads prices.json (written daily by .github/workflows/update-prices.yml).
+// Bar stays hidden if the file is missing or empty.
+const PERSONAL_ITEMS=[{sym:'MIGUEL · NUS DSA',val:'CLASS OF 2026',chg:'OPEN TO WORK',up:true,plain:true}];
+async function loadTicker(){
+  try{
+    const res=await fetch('prices.json?d='+new Date().toISOString().slice(0,10),{cache:'no-cache'});
+    if(!res.ok)return;
+    const data=await res.json();
+    const quotes=(data.quotes||[]).filter(q=>Number.isFinite(q.close)&&Number.isFinite(q.change_pct));
+    if(!quotes.length)return;
+    const items=quotes.map(q=>({sym:q.symbol,val:'$'+q.close.toFixed(2),chg:(q.change_pct>=0?'+':'')+q.change_pct.toFixed(2)+'%',up:q.change_pct>=0}));
+    const all=[...items,...PERSONAL_ITEMS];
+    document.getElementById('ticker').innerHTML=[...all,...all].map(t=>`<span class="ticker-item"><span class="ticker-sym">${t.sym}</span>${t.val}<span class="${t.up?'t-up':'t-dn'}">${t.plain?'':(t.up?'▲ ':'▼ ')}${t.chg}</span><span class="ticker-sep">|</span></span>`).join('');
+    if(data.as_of){
+      const d=new Date(data.as_of+'T00:00:00');
+      document.getElementById('tickerDate').textContent=d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'}).toUpperCase();
     }
-    return null;
-  } catch {
-    return null;
-  }
+    document.body.classList.add('has-ticker');
+  }catch(e){/* no data yet: keep bar hidden */}
 }
-
-function saveCache(data) {
-  localStorage.setItem(CACHE_KEY, JSON.stringify({
-    date: getTodayKey(),
-    data
-  }));
-}
-
-// -----------------------------
-// FETCH DAILY CLOSE
-// -----------------------------
-async function fetchDailyClose(symbol) {
-  const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${encodeURIComponent(symbol)}&outputsize=compact&apikey=${AV_API_KEY}`;
-
-  const res = await fetch(url);
-  const data = await res.json();
-
-  if (data.Note || data.Information || data['Error Message']) {
-    console.warn('Alpha Vantage limit hit:', data);
-    return null;
-  }
-
-  const series = data['Time Series (Daily)'];
-  if (!series) return null;
-
-  const dates = Object.keys(series).sort().reverse();
-  if (dates.length < 2) return null;
-
-  const latest = series[dates[0]];
-  const prev = series[dates[1]];
-
-  const latestClose = Number(latest['4. close']);
-  const prevClose = Number(prev['4. close']);
-
-  if (!Number.isFinite(latestClose) || !Number.isFinite(prevClose)) return null;
-
-  const pctChange = ((latestClose - prevClose) / prevClose) * 100;
-
-  return {
-    price: latestClose,
-    changePercent: pctChange
-  };
-}
-
-// -----------------------------
-// MAIN UPDATE FUNCTION
-// -----------------------------
-async function updateTickerData() {
-  const cached = loadCache();
-
-  if (cached) {
-    tickerData = [
-      ...cached,
-      ...PERSONAL_ITEMS
-    ];
-    renderTicker();
-    return;
-  }
-
-  try {
-    const liveData = [];
-
-    for (const item of avSymbols) {
-      const q = await fetchDailyClose(item.symbol);
-
-      if (q) {
-        liveData.push({
-          sym: item.label,
-          val: formatPrice(q.price),
-          chg: formatPct(q.changePercent),
-          up: q.changePercent >= 0
-        });
-      }
-
-      // avoid rate limit
-      await new Promise(r => setTimeout(r, 1200));
-    }
-
-    saveCache(liveData);
-
-    tickerData = [
-      ...liveData,
-      ...PERSONAL_ITEMS
-    ];
-
-    renderTicker();
-  } catch (err) {
-    console.error(err);
-
-    tickerData = [
-      { sym:'MARKET DATA', val:'FAILED', chg:'TRY TOMORROW', up:false },
-      ...PERSONAL_ITEMS
-    ];
-
-    renderTicker();
-  }
-}
-
-// -----------------------------
-renderTicker();
-updateTickerData();
+loadTicker();
 
 // TYPEWRITER
 const phrases=['Hi, I am Miguel Viloria.','Data Scientist.','ML Engineer.','Aspiring Quant Researcher.','NUS DSA · Class of 2026.'];
@@ -690,12 +562,11 @@ function switchTab(id,btn){
 }
 
 const projects={
+  engine:{type:'Quant Finance · Deployed App',title:'Portfolio Optimisation Engine',bullets:['Built and deployed Streamlit app that allocates any ticker universe by blending HRP and regime-conditioned Black-Litterman','Made the Max-Sharpe solve converge globally by recasting it as a convex quadratic program in CVXPY via Schaible transformation','Cut volatility ~8% vs equal-weight (17% vs 18.5%, bootstrap 95% CI excludes zero) at equal return over 25 years on 9 sector ETFs'],tags:['Python','Streamlit','CVXPY','HRP','Black-Litterman'],live:'http://quant-portfolio-terminal.streamlit.app/'},
   f1:{type:'Motorsport · Data',title:'F1 Pit Strategy Simulator',bullets:['Interactive Streamlit app built on FastF1 telemetry to simulate pit-stop timing and outcomes.','Projects a driver\'s rejoin position after a stop and models the surrounding traffic.','Maps threats such as dirty air and rejoin clashes to pressure-test strategy calls.'],tags:['Python','Streamlit','FastF1','Pandas'],github:'https://github.com/migletdespacitos/F1-Pit-Strategy'},
-  fiscaldml:{type:'Public Policy · Causal ML',title:'Sectoral Fiscal Multipliers via Double Machine Learning',bullets:['Built a full macro-fiscal data pipeline from raw SingStat/MAS exports (GDP, sectoral government expenditure, CPI, SORA), handling wide-format reshaping, monthly-to-quarterly resampling, and dynamic header/footnote cleaning.','Implemented manual Double Machine Learning (Chernozhukov et al., 2018): cross-fitted RidgeCV nuisance models predict spending and GDP growth from lagged interest rates and inflation, isolating unanticipated fiscal shocks from the predictable macro cycle.','Used 5-fold cross-fitting (chronological, non-shuffled) to prevent nuisance-model overfitting from biasing the residualised treatment effect toward zero.','Estimated causal fiscal multipliers for three spending sectors via HC3-robust OLS on the orthogonalised residuals, finding near-zero, statistically insignificant short-run effects consistent with Singapore\'s high import leakage and multi-quarter development-spending lags.'],tags:['Python','scikit-learn','statsmodels','Pandas','NumPy','Double Machine Learning','Causal Inference'],github:'https://github.com/migletdespacitos/SG-Fiscal-Multipliers-DML',medium:'https://medium.com/@miko232411/building-a-causal-ml-pipeline-to-test-singapores-national-budget-1640ca3889b3'},
   credit:{type:'FinTech · ML',title:'Data-Driven Credit Scoring Using Explainable ML on Imbalanced Datasets',bullets:['Built credit-scoring models on the German Credit dataset using Logistic Regression, Random Forest, Gradient Boosting (LightGBM, CatBoost), and a Feedforward Neural Network.','Applied 5-fold Stratified Cross-Validation and RandomisedSearchCV with ROC-AUC as the optimisation metric.','Implemented GHOST post-hoc threshold calibration tuned for F1 and F2 objectives to serve different institutional risk profiles.','Engineered 7 domain-specific interaction features capturing liquidity, income pressure, household obligations, and creditworthiness.','TreeSHAP identified Status of Existing Checking Account, Credit Duration, and Debt Burden Index as top predictors across all models.'],tags:['Python','Gradient Boosting','Random Forest','scikit-learn','SHAP','GHOST','Stratified CV','Feature Engineering'],github:'https://github.com/roa7/DSE4212'},
   rna:{type:'Bioinformatics · ML',title:'m6A RNA Modification Classifier',bullets:['Developed a HistGradientBoosting classifier to identify m6A RNA modifications from direct RNA-Seq data.','Applied to SG-NEx human cancer cell line datasets with end-to-end training, evaluation, and prediction workflows.','Optimised using PR-AUC and ROC-AUC to balance accuracy and interpretability on imbalanced biological data.'],tags:['Python','scikit-learn','HistGradientBoosting','RNA-Seq'],github:'https://github.com/jingzhing/DSA4262'},
   themepark:{type:'Operations Research',title:'Data-Driven Resource Allocation for Theme Park Operations',bullets:['Led demand variability and resource allocation modelling for Universal Studios Singapore in a 10-member team (DSA3101).','Developed an optimisation framework to dynamically deploy staff based on forecasted visitor flows.','Translated model outputs into staffing recommendations to improve operational efficiency.'],tags:['Python','Optimisation'],github:'https://github.com/dimsumws/DSA3101-Group5'},
-  hrp:{type:'Finance · Self-Directed',title:'Portfolio Optimisation using Hierarchical Risk Parity in Python',bullets:['Self-directed: built a Python portfolio optimiser using Hierarchical Risk Parity (HRP).','Integrated yfinance for dynamic data retrieval and PyPortfolioOpt for portfolio construction.','Applied hierarchical clustering to improve robustness of risk allocation across assets.'],tags:['Python','yfinance','PyPortfolioOpt','HRP'],github:'https://github.com/migletdespacitos/hrp-portfolio-optimisation'},
   cancer:{type:'ML · Healthcare',title:'Early Detection of Breast Cancer using Machine Learning',bullets:['Trained and compared KNN, Logistic Regression, and Neural Network models for early cancer detection (IT1244).','Evaluated model performance and interpretability for clinical decision support.'],tags:['Python','NumPy','Keras','scikit-learn','KNN','Logistic Regression','Neural Networks'],github:'https://github.com/migletdespacitos/ML-Early-Detection-Breast-Cancer'},
   game:{type:'Game Dev · Hackathon',title:'A Lucid Dream (2D Game) & Book Recommender',bullets:['Developed a 2D roguelike game in Unity/C# with Firebase backend (NUS Orbital, Gemini Intermediate cert).','Built a book recommendation backend in Python/Pandas for NUS Hackers Hack&Roll 2024.'],tags:['Unity','C#','Firebase','Python'],githubGame:'https://github.com/migletdespacitos/ALucidDream-2DGame',githubBook:'https://github.com/oldonesnow/LazyBookCurator'}
 };
@@ -706,6 +577,7 @@ function openProject(key){
   document.getElementById('mTitle').textContent=p.title;
   let html='<div class="modal-section-label">Overview</div><ul class="modal-bullets">'+p.bullets.map(b=>`<li>${b}</li>`).join('')+'</ul>';
   html+='<div class="modal-section-label">Technologies</div><div class="modal-tags">'+p.tags.map(t=>`<span class="modal-tag">${t}</span>`).join('')+'</div>';
+  if(p.live)html+=`<a class="modal-github" href="${p.live}" target="_blank">Launch Live App ↗</a>`;
   if(p.github)html+=`<a class="modal-github" href="${p.github}" target="_blank">View on GitHub ↗</a>`;
   if(p.medium)html+=`<a class="modal-github" href="${p.medium}" target="_blank">Read on Medium ↗</a>`;
   if(p.githubGame)html+=`<a class="modal-github" href="${p.githubGame}" target="_blank">Game on GitHub ↗</a><a class="modal-github" href="${p.githubBook}" target="_blank">Book Recommender ↗</a>`;
@@ -716,6 +588,113 @@ function openProject(key){
 function closeModal(e){if(e.target===document.getElementById('modalOverlay'))closeModalDirect();}
 function closeModalDirect(){document.getElementById('modalOverlay').classList.remove('active');document.body.style.overflow='';}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModalDirect();});
+</script>
+<script type="module">
+// Stylised implied-vol surface. Term structure uses the Heston expected
+// average variance  σ²(T) = θ + (v0−θ)(1−e^{−κT})/(κT); skew and smile
+// curvature decay with maturity. v0 oscillates between a calm and a
+// stressed regime so the surface "breathes" between the two.
+const host=document.getElementById('volsurf');
+const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+try{
+  const THREE=await import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js');
+  const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  host.appendChild(renderer.domElement);
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(38,1,0.1,100);
+
+  const NK=56,NT=36;                 // grid: log-moneyness × maturity
+  const KMIN=-0.45,KMAX=0.45,TMIN=0.05,TMAX=2.0;
+  const W=7.2,D=5.2,H=7.5;            // world scale (x=k, z=T, y=σ)
+  const kappa=1.6,theta=0.045;       // long-run variance ≈ 21% vol
+  const CALM=0.022,STRESS=0.16;      // v0 in each regime (≈15% / 40% vol)
+
+  const n=NK*NT, pos=new Float32Array(n*3), col=new Float32Array(n*3);
+  const cLow=new THREE.Color('#16a34a'),cMid=new THREE.Color('#ff8700'),cHigh=new THREE.Color('#e10600'),tmp=new THREE.Color();
+  function iv(k,T,v0,stress){
+    const avgVar=theta+(v0-theta)*(1-Math.exp(-kappa*T))/(kappa*T);
+    const atm=Math.sqrt(avgVar);
+    const skew=-(0.16+0.22*stress)/Math.sqrt(1+3*T);
+    const curv=(0.22+0.35*stress)/(1+2.5*T);
+    return Math.max(0.05,atm+skew*k+curv*k*k);
+  }
+  for(let j=0;j<NT;j++)for(let i=0;i<NK;i++){
+    const idx=(j*NK+i)*3;
+    pos[idx]=(i/(NK-1)-0.5)*W; pos[idx+2]=(j/(NT-1)-0.5)*D;
+  }
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+  const tri=[],seg=[];
+  for(let j=0;j<NT-1;j++)for(let i=0;i<NK-1;i++){
+    const a=j*NK+i,b=a+1,c=a+NK,d=c+1; tri.push(a,c,b,b,c,d);
+  }
+  for(let j=0;j<NT;j++)for(let i=0;i<NK;i++){
+    const a=j*NK+i;
+    if(i<NK-1&&j%3===0)seg.push(a,a+1);        // smile slices every 3rd maturity
+    if(j<NT-1&&i%4===0)seg.push(a,a+NK);       // term-structure lines
+  }
+  geo.setIndex(tri);
+  const fill=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({vertexColors:true,transparent:true,opacity:0.10,side:THREE.DoubleSide,depthWrite:false}));
+  const lgeo=new THREE.BufferGeometry();
+  lgeo.setAttribute('position',geo.getAttribute('position'));
+  lgeo.setAttribute('color',geo.getAttribute('color'));
+  lgeo.setIndex(seg);
+  const lines=new THREE.LineSegments(lgeo,new THREE.LineBasicMaterial({vertexColors:true,transparent:true,opacity:0.85}));
+  const group=new THREE.Group(); group.add(fill,lines); scene.add(group);
+
+  // floor grid + axes
+  const grid=new THREE.GridHelper(8,16,0x26342a,0x1e2a1e); grid.position.y=-0.02; grid.material.transparent=true; grid.material.opacity=0.45; scene.add(grid);
+  const regEl=document.getElementById('volReg'),atmEl=document.getElementById('volAtm');
+  function update(t){
+    const s=0.5-0.5*Math.cos(t*0.35);          // 0 = calm, 1 = stressed
+    const e=s*s*(3-2*s);
+    const v0=CALM+(STRESS-CALM)*e;
+    for(let j=0;j<NT;j++){
+      const T=TMIN+(TMAX-TMIN)*j/(NT-1);
+      for(let i=0;i<NK;i++){
+        const k=KMIN+(KMAX-KMIN)*i/(NK-1), idx=(j*NK+i)*3;
+        const v=iv(k,T,v0,e);
+        pos[idx+1]=v*H;
+        const u=Math.min(1,Math.max(0,(v-0.17)/0.33));
+        u<0.5?tmp.copy(cLow).lerp(cMid,u*2):tmp.copy(cMid).lerp(cHigh,(u-0.5)*2);
+        col[idx]=tmp.r;col[idx+1]=tmp.g;col[idx+2]=tmp.b;
+      }
+    }
+    geo.attributes.position.needsUpdate=true; geo.attributes.color.needsUpdate=true;
+    const stressed=e>0.5;
+    regEl.textContent=stressed?'STRESSED':'CALM'; regEl.classList.toggle('stress',stressed);
+    atmEl.textContent=(iv(0,1,v0,e)*100).toFixed(1)+'%';
+  }
+
+  let mx=0,my=0;
+  window.addEventListener('pointermove',ev=>{mx=ev.clientX/innerWidth-0.5;my=ev.clientY/innerHeight-0.5;},{passive:true});
+  function resize(){
+    const w=host.clientWidth,h=host.clientHeight; renderer.setSize(w,h,false);
+    camera.aspect=w/h; camera.updateProjectionMatrix();
+    const mobile=w<720; group.position.x=mobile?0:3.4; grid.position.x=group.position.x;
+  }
+  addEventListener('resize',resize); resize();
+
+  let visible=true;
+  new IntersectionObserver(([en])=>{visible=en.isIntersecting;}).observe(host);
+  const t0=performance.now();
+  function frame(now){
+    const t=(now-t0)/1000;
+    if(visible){
+      update(t);
+      const ang=-0.55+Math.sin(t*0.08)*0.35+mx*0.4;
+      const r=15;
+      camera.position.set(Math.sin(ang)*r,6.2-my*1.6,Math.cos(ang)*r);
+      camera.lookAt(1.2,0.4,0);
+      renderer.render(scene,camera);
+    }
+    if(!reduce)requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  host.classList.add('ready');
+}catch(err){ console.warn('3D surface unavailable:',err); }
 </script>
 </body>
 </html>
