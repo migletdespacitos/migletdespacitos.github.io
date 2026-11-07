@@ -1,61 +1,61 @@
 {
-  "as_of": "2026-11-05",
+  "as_of": "2026-11-06",
   "quotes": [
     {
       "symbol": "NVDA",
-      "date": "2026-11-05",
-      "close": 181.6,
-      "prev_close": 200.13,
-      "change_pct": -9.26
+      "date": "2026-11-06",
+      "close": 186.64,
+      "prev_close": 181.6,
+      "change_pct": 2.78
     },
     {
       "symbol": "VOO",
-      "date": "2026-11-05",
-      "close": 673.97,
-      "prev_close": 704.78,
-      "change_pct": -4.37
+      "date": "2026-11-06",
+      "close": 675.99,
+      "prev_close": 673.97,
+      "change_pct": 0.3
     },
     {
       "symbol": "MSFT",
-      "date": "2026-11-05",
-      "close": 535.93,
-      "prev_close": 555.8,
-      "change_pct": -3.58
+      "date": "2026-11-06",
+      "close": 530.61,
+      "prev_close": 535.93,
+      "change_pct": -0.99
     },
     {
       "symbol": "SMH",
-      "date": "2026-11-05",
-      "close": 447.73,
-      "prev_close": 504.27,
-      "change_pct": -11.21
+      "date": "2026-11-06",
+      "close": 463.96,
+      "prev_close": 447.73,
+      "change_pct": 3.62
     },
     {
       "symbol": "GOOGL",
-      "date": "2026-11-05",
-      "close": 282.57,
-      "prev_close": 288.93,
-      "change_pct": -2.2
+      "date": "2026-11-06",
+      "close": 284.78,
+      "prev_close": 282.57,
+      "change_pct": 0.78
     },
     {
       "symbol": "QQQ",
-      "date": "2026-11-05",
-      "close": 647.05,
-      "prev_close": 691.95,
-      "change_pct": -6.49
+      "date": "2026-11-06",
+      "close": 656.1,
+      "prev_close": 647.05,
+      "change_pct": 1.4
     },
     {
       "symbol": "AMZN",
-      "date": "2026-11-05",
-      "close": 260.21,
-      "prev_close": 266.03,
-      "change_pct": -2.19
+      "date": "2026-11-06",
+      "close": 259.3,
+      "prev_close": 260.21,
+      "change_pct": -0.35
     },
     {
       "symbol": "AMD",
-      "date": "2026-11-05",
-      "close": 404.4,
-      "prev_close": 488.78,
-      "change_pct": -17.26
+      "date": "2026-11-06",
+      "close": 449.04,
+      "prev_close": 404.4,
+      "change_pct": 11.04
     }
   ]
 }
