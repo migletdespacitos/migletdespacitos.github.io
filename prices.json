@@ -1,61 +1,61 @@
 {
-  "as_of": "2026-11-19",
+  "as_of": "2026-11-20",
   "quotes": [
     {
       "symbol": "NVDA",
-      "date": "2026-11-19",
-      "close": 145.98,
-      "prev_close": 150.96,
-      "change_pct": -3.3
+      "date": "2026-11-20",
+      "close": 125.53,
+      "prev_close": 145.98,
+      "change_pct": -14.01
     },
     {
       "symbol": "VOO",
-      "date": "2026-11-19",
-      "close": 658.01,
-      "prev_close": 671.31,
-      "change_pct": -1.98
+      "date": "2026-11-20",
+      "close": 635.54,
+      "prev_close": 658.01,
+      "change_pct": -3.41
     },
     {
       "symbol": "MSFT",
-      "date": "2026-11-19",
-      "close": 498.3,
-      "prev_close": 508.29,
-      "change_pct": -1.97
+      "date": "2026-11-20",
+      "close": 484.52,
+      "prev_close": 498.3,
+      "change_pct": -2.77
     },
     {
       "symbol": "SMH",
-      "date": "2026-11-19",
-      "close": 447.48,
-      "prev_close": 459.54,
-      "change_pct": -2.62
+      "date": "2026-11-20",
+      "close": 400.06,
+      "prev_close": 447.48,
+      "change_pct": -10.6
     },
     {
       "symbol": "GOOGL",
-      "date": "2026-11-19",
-      "close": 272.66,
-      "prev_close": 282.44,
-      "change_pct": -3.46
+      "date": "2026-11-20",
+      "close": 265.29,
+      "prev_close": 272.66,
+      "change_pct": -2.7
     },
     {
       "symbol": "QQQ",
-      "date": "2026-11-19",
-      "close": 645.04,
-      "prev_close": 659.51,
-      "change_pct": -2.19
+      "date": "2026-11-20",
+      "close": 608.45,
+      "prev_close": 645.04,
+      "change_pct": -5.67
     },
     {
       "symbol": "AMZN",
-      "date": "2026-11-19",
-      "close": 257.37,
-      "prev_close": 267.74,
-      "change_pct": -3.87
+      "date": "2026-11-20",
+      "close": 246.82,
+      "prev_close": 257.37,
+      "change_pct": -4.1
     },
     {
       "symbol": "AMD",
-      "date": "2026-11-19",
-      "close": 489.19,
-      "prev_close": 530.14,
-      "change_pct": -7.72
+      "date": "2026-11-20",
+      "close": 424.39,
+      "prev_close": 489.19,
+      "change_pct": -13.25
     }
   ]
 }
